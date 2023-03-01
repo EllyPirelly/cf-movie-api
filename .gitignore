@@ -1,0 +1,19 @@
+# Mac files
+.DS_Store
+*/.DS_Store
+
+# vscode
+.history/
+.vscode/
+
+# Optional npm cache directory
+.npm
+
+# Dependency directories
+node_modules/
+*/.node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
