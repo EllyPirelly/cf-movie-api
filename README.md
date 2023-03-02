@@ -5,7 +5,8 @@ TODO
 
 ### Requirements
 
-TODO
+- [express](https://www.npmjs.com/package/express)
+- [body-parser](https://www.npmjs.com/package/body-parser)
 
 ### Sources
 TODO
