@@ -4,7 +4,25 @@ const express = require('express'),
 const app = express();
 
 app.use(morgan('common'));
+app.use(express.static('public'));
 
+// error handling via function - does not work?
+function errorHandler(err, req, res, next) {
+  res.status(500);
+  res.render('error', { error: err });
+}
+
+app.use(errorHandler);
+
+// error handling middleware - does not work?
+// app.use((err, req, res, next) => {
+//   console.log('error handling middleware called');
+//   console.error(err.stack);
+//   res.send('Error' + err);
+//   res.status(500).send('There seems to be an error.');
+// });
+
+// static fav movies json
 let favMovies = [
   {
     title: 'The Fifth Element',
@@ -64,8 +82,6 @@ let favMovies = [
   }
 ];
 
-app.use(express.static('public'));
-
 // GET requests
 app.get('/', (req, res) => {
   res.send('Check out my favorite movies.');
@@ -75,6 +91,7 @@ app.get('/movies', (req, res) => {
   res.json(favMovies);
 });
 
+// listen to port 8080
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
