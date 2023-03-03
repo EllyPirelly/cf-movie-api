@@ -61,10 +61,19 @@ let favMovies = [
   {
     title: 'The Odd Couple',
     releasedate: '1968',
-  },
-]
+  }
+];
 
-// TODO
+app.use(express.static('public'));
+
+// GET requests
+app.get('/', (req, res) => {
+  res.send('Check out my favorite movies.');
+});
+
+app.get('/movies', (req, res) => {
+  res.json(favMovies);
+});
 
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
