@@ -7,6 +7,7 @@ TODO
 
 - [express](https://www.npmjs.com/package/express)
 - [body-parser](https://www.npmjs.com/package/body-parser)
+- [morgan](https://www.npmjs.com/package/morgan)
 
 ### Sources
 TODO

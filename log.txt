@@ -1,12 +1,5 @@
-URL: /
-Timestamp: Wed Mar 01 2023 12:13:20 GMT+0100 (Mitteleuropäische Normalzeit)
-
-URL: /favicon.ico
-Timestamp: Wed Mar 01 2023 12:13:20 GMT+0100 (Mitteleuropäische Normalzeit)
-
-URL: /documentation
-Timestamp: Wed Mar 01 2023 12:13:28 GMT+0100 (Mitteleuropäische Normalzeit)
-
-URL: /favicon.ico
-Timestamp: Wed Mar 01 2023 12:13:28 GMT+0100 (Mitteleuropäische Normalzeit)
-
+::1 - - [06/Mar/2023:07:53:56 +0000] "GET / HTTP/1.1" 304 -
+::1 - - [06/Mar/2023:07:54:11 +0000] "GET /movies HTTP/1.1" 304 -
+::1 - - [06/Mar/2023:07:54:27 +0000] "GET /documentation.html HTTP/1.1" 304 -
+::1 - - [06/Mar/2023:07:54:35 +0000] "GET /documentation HTTP/1.1" 404 152
+::1 - - [06/Mar/2023:07:54:44 +0000] "GET /document HTTP/1.1" 404 147
