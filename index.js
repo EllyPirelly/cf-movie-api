@@ -92,12 +92,21 @@ app.get('/documentation', (req, res) => {
 })
 
 // error handling middleware
-app.use((err, req, res, next) => {
-  console.log('error handling middleware called');
-  console.error(err.stack);
-  res.send('Error' + err);
-  res.status(500).send('There seems to be an error.');
-});
+// app.use((err, req, res, next) => {
+//   console.log('error handling middleware called');
+//   console.error(err.stack);
+//   res.send('Error' + err);
+//   res.status(500).send('There seems to be an error.');
+// });
+
+// alternative error handling middleware
+app.use((req, res, next) => {
+  const err = new Error('Not found.');
+  console.log(err);
+  err.status = 404;
+  res.send('Route not found');
+  next(err);
+})
 
 // listen to port 8080
 app.listen(8080, () => {
