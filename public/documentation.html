@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoviePool | API doc</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid;
+      }
+    </style>
   </head>
 
   <body>
@@ -41,6 +49,93 @@
         <li>allows users to remove a movie from their list of favorites</li>
         <li>allows existing users to deregister</li>
       </ul>
+    </section>
+
+    <section>
+      <table>
+        <thead>
+          <th>Business Logic</th>
+          <th>URL</th>
+          <th>HTTP Method</th>
+          <th>Request body data format</th>
+          <th>Response body data format</th>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Get a list of all movies</td>
+            <td>/movies</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object containing a list of all movies</td>
+          </tr>
+
+          <tr>
+            <td>Get data about a single movie by title/name</td>
+            <td>/movies/[title]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about a single movie, containing description, genre, director, image URL (if
+              present)</td>
+          </tr>
+
+          <tr>
+            <td>Get data about a genre (description) by title/name (e.g. "Action")</td>
+            <td>/movies/[genre]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about a genre</td>
+          </tr>
+
+          <tr>
+            <td>Get data about a single director by name</td>
+            <td>/movies/[director]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about a single director, containing bio, birth year, death year</td>
+          </tr>
+
+          <tr>
+            <td>Add a user</td>
+            <td>/users</td>
+            <td>POST</td>
+            <td>todo</td>
+            <td>A JSON object holding data about the user that was added, including an ID</td>
+          </tr>
+
+          <tr>
+            <td>Update a user info (user name)</td>
+            <td>/users/[id]</td>
+            <td>PUT</td>
+            <td>todo</td>
+            <td>A text message indicating that the user info (user name) has been updated</td>
+          </tr>
+
+          <tr>
+            <td>Add a movie to user's favorites list</td>
+            <td>/users/[id]/[favorite]</td>
+            <td>POST</td>
+            <td>todo</td>
+            <td>A text message indicating that a movie has been added to user's list of favorites</td>
+          </tr>
+
+          <tr>
+            <td>Remove a movie from user's favorites list</td>
+            <td>/users/[id]/[favorite]</td>
+            <td>DELETE</td>
+            <td>todo</td>
+            <td>A test message indicating that a movie has been removed from user's list of favorites</td>
+          </tr>
+
+          <tr>
+            <td>Remove existing user (deregister)</td>
+            <td>/users/[id]</td>
+            <td>DELETE</td>
+            <td>todo</td>
+            <td>A text message indicating that a user email has been removed</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
   </body>
 
