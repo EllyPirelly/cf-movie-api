@@ -1,26 +1,19 @@
-const express = require('express'),
-  morgan = require('morgan');
-
+const express = require('express');
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
-app.use(morgan('common'));
+// creates write stream, appends logs to log file log.txt
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'log.txt'),
+  {
+    flags: 'a'
+  }
+);
+
+app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
-
-// error handling via function - does not work?
-function errorHandler(err, req, res, next) {
-  res.status(500);
-  res.render('error', { error: err });
-}
-
-app.use(errorHandler);
-
-// error handling middleware - does not work?
-// app.use((err, req, res, next) => {
-//   console.log('error handling middleware called');
-//   console.error(err.stack);
-//   res.send('Error' + err);
-//   res.status(500).send('There seems to be an error.');
-// });
 
 // static fav movies json
 let favMovies = [
@@ -84,11 +77,26 @@ let favMovies = [
 
 // GET requests
 app.get('/', (req, res) => {
+  console.log('Check out my favorite movies.');
   res.send('Check out my favorite movies.');
 });
 
 app.get('/movies', (req, res) => {
+  console.log('Favorite Movies');
   res.json(favMovies);
+});
+
+app.get('/documentation', (req, res) => {
+  console.log('Documentation found.');
+  res.send('API documentation');
+})
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.log('error handling middleware called');
+  console.error(err.stack);
+  res.send('Error' + err);
+  res.status(500).send('There seems to be an error.');
 });
 
 // listen to port 8080
