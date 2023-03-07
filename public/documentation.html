@@ -63,76 +63,93 @@
 
         <tbody>
           <tr>
-            <td>Get a list of all movies</td>
-            <td>/movies</td>
-            <td>GET</td>
-            <td>None</td>
-            <td>A JSON object containing a list of all movies</td>
+            <td colspan="5">USERS</td>
           </tr>
 
           <tr>
-            <td>Get data about a single movie by title/name</td>
-            <td>/movies/[title]</td>
-            <td>GET</td>
-            <td>None</td>
-            <td>A JSON object holding data about a single movie, containing description, genre, director, image URL (if
-              present)</td>
-          </tr>
-
-          <tr>
-            <td>Get data about a genre (description) by title/name (e.g. "Action")</td>
-            <td>/movies/[genre]</td>
-            <td>GET</td>
-            <td>None</td>
-            <td>A JSON object holding data about a genre</td>
-          </tr>
-
-          <tr>
-            <td>Get data about a single director by name</td>
-            <td>/movies/[director]</td>
-            <td>GET</td>
-            <td>None</td>
-            <td>A JSON object holding data about a single director, containing bio, birth year, death year</td>
-          </tr>
-
-          <tr>
-            <td>Add a user</td>
+            <td>Add new user</td>
             <td>/users</td>
             <td>POST</td>
-            <td>todo</td>
-            <td>A JSON object holding data about the user that was added, including an ID</td>
+            <td>A JSON object containing data about the user to add, structured like: ...TODO...</td>
+            <td>A JSON object containing data about the user that has been added</td>
           </tr>
 
           <tr>
-            <td>Update a user info (user name)</td>
-            <td>/users/[id]</td>
+            <td>Get all users</td>
+            <td>/users</td>
+            <td>GET</td>
+            <td>none</td>
+            <td>A JSON object containing data about all users</td>
+          </tr>
+
+          <tr>
+            <td>Update user (user name)</td>
+            <td>/users/[User Name]</td>
             <td>PUT</td>
-            <td>todo</td>
-            <td>A text message indicating that the user info (user name) has been updated</td>
+            <td>none</td>
+            <td>A text message indicating that the user (user name) has been updated</td>
           </tr>
 
           <tr>
-            <td>Add a movie to user's favorites list</td>
-            <td>/users/[id]/[favorite]</td>
-            <td>POST</td>
-            <td>todo</td>
+            <td>Delete existing user (deregister)</td>
+            <td>/users/[ID]</td>
+            <td>DELETE</td>
+            <td>none</td>
+            <td>A text message indicating that a user (email) has been removed</td>
+          </tr>
+
+          <tr>
+            <td>Add (update) movie to user's favorites list</td>
+            <td>/users/[User Name]/[Favorite Movies]</td>
+            <td>PUT</td>
+            <td>none</td>
             <td>A text message indicating that a movie has been added to user's list of favorites</td>
           </tr>
 
           <tr>
             <td>Remove a movie from user's favorites list</td>
-            <td>/users/[id]/[favorite]</td>
+            <td>/users/[User Name]/[Favorite Movies]</td>
             <td>DELETE</td>
-            <td>todo</td>
+            <td>none</td>
             <td>A test message indicating that a movie has been removed from user's list of favorites</td>
           </tr>
 
           <tr>
-            <td>Remove existing user (deregister)</td>
-            <td>/users/[id]</td>
-            <td>DELETE</td>
-            <td>todo</td>
-            <td>A text message indicating that a user email has been removed</td>
+            <td colspan="5">MOVIES</td>
+          </tr>
+
+          <tr>
+            <td>Get all movies</td>
+            <td>/movies</td>
+            <td>GET</td>
+            <td>none</td>
+            <td>A JSON object containing data about all movies</td>
+          </tr>
+
+          <tr>
+            <td>Get single movie by movie title</td>
+            <td>/movies/[Movie Title]</td>
+            <td>GET</td>
+            <td>none</td>
+            <td>A JSON object containing data about a single movie (description, genre, director, image URL (if
+              present))
+            </td>
+          </tr>
+
+          <tr>
+            <td>Get movie genre by genre name (e.g., "Action")</td>
+            <td>/movies/[Genres]/[Genre Name]</td>
+            <td>GET</td>
+            <td>none</td>
+            <td>A JSON object containing data about a movie genre</td>
+          </tr>
+
+          <tr>
+            <td>Get single director by director name</td>
+            <td>/movies/[Directors]/[Director Name]</td>
+            <td>GET</td>
+            <td>none</td>
+            <td>A JSON object containing data about a single director (bio, birth year, death year)</td>
           </tr>
         </tbody>
       </table>
