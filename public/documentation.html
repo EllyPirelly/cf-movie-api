@@ -70,8 +70,25 @@
             <td>Add new user</td>
             <td>/users</td>
             <td>POST</td>
-            <td>A JSON object containing data about the user to add, structured like: ...TODO...</td>
-            <td>A JSON object containing data about the user that has been added</td>
+            <td>A JSON object containing data about the user to add, structured like: <br>
+              { <br>
+              "userName": "I am extra special new", <br>
+              "favorites": [ <br>
+              "super-duper movie", <br>
+              "great movie" <br>
+              ] <br>
+              } <br>
+            </td>
+            <td>A JSON object containing data about the user that has been added <br>
+              { <br>
+              "userName": "I am extra special new", <br>
+              "favorites": [ <br>
+              "super-duper movie", <br>
+              "great movie" <br>
+              ], <br>
+              "id": "4ea380c7-0b12-47e1-8e39-5908b787356d" <br>
+              } <br>
+            </td>
           </tr>
 
           <tr>
@@ -87,7 +104,7 @@
             <td>/users/[User Name]</td>
             <td>PUT</td>
             <td>none</td>
-            <td>A text message indicating that the user (user name) has been updated</td>
+            <td>A text message indicating that the user has been updated</td>
           </tr>
 
           <tr>
@@ -95,20 +112,20 @@
             <td>/users/[ID]</td>
             <td>DELETE</td>
             <td>none</td>
-            <td>A text message indicating that a user (email) has been removed</td>
+            <td>A text message indicating that a user has been removed</td>
           </tr>
 
           <tr>
-            <td>Add (update) movie to user's favorites list</td>
-            <td>/users/[User Name]/[Favorite Movies]</td>
-            <td>PUT</td>
+            <td>Add movie to user's favorites list</td>
+            <td>/users/[ID]/[Favorite Movie]</td>
+            <td>POST</td>
             <td>none</td>
             <td>A text message indicating that a movie has been added to user's list of favorites</td>
           </tr>
 
           <tr>
             <td>Remove a movie from user's favorites list</td>
-            <td>/users/[User Name]/[Favorite Movies]</td>
+            <td>/users/[ID]/[Favorite Movie]</td>
             <td>DELETE</td>
             <td>none</td>
             <td>A test message indicating that a movie has been removed from user's list of favorites</td>

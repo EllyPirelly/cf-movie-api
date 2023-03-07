@@ -19,13 +19,13 @@ app.use(bodyParser.json());
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
-// static users json
+// static users
 let users = [
   {
     id: 1,
     userName: 'John Doe',
     favorites: [
-      "movie", "another movie"
+      'movie', 'another movie'
     ],
   },
   {
@@ -37,12 +37,12 @@ let users = [
     id: 3,
     userName: 'Mary Miller',
     favorites: [
-      "another movie", "some very good movie"
+      'another movie', 'some very good movie'
     ],
   }
 ];
 
-// static movies json
+// static movies
 let movies = [
   {
     movieTitle: 'The Fifth Element',
@@ -202,65 +202,119 @@ app.get('/documentation', (req, res) => {
 
 // USERS
 
-// create user - response JSON
+// create user - response needs to be JSON
 // an entire JSON object is too complex to include in URL - request body is needed
 app.post('/users', (req, res) => {
-  res.status(201).json(users);
-  res.send('Success in creating a new user.');
+  const newUser = req.body;
+
+  if (!newUser.userName) {
+    res.status(400).send('Missing user name in request body');
+  } else {
+    newUser.id = uuid.v4();
+    users.push(newUser);
+    res.status(201).send(newUser);
+  }
 });
 
-// read all users - response JSON
+// read all users - response needs to be JSON
 app.get('/users', (req, res) => {
   res.status(200).json(users);
   res.send('Success in returning all user data.');
 });
 
-// update user (user name) - response text
+// update user - response in text
 // only updating one piece of data - no request body needed
 app.put('/users/:userName', (req, res) => {
-  res.status(201).send('Success in updating a user.');
+  const { userName } = req.params;
+  const user = users.find(user => user.userName === userName);
+
+  if (user) {
+    res.status(201).send('Success in updating user name.');
+  } else {
+    res.status(400).send('User name not found.');
+  }
 });
 
-// delete user by id - response text
+// delete user by id - response in text
 app.delete('/users/:id', (req, res) => {
-  res.status(201).send('Success in deleting a user.');
+  const { id } = req.params;
+  const user = users.find(user => user.id === id);
+
+  if (user) {
+    users = users.filter(user => user.id !== id);
+    res.status(201).send('Success in deregistering user.');
+  } else {
+    res.status(400).send('User not found.');
+  }
 });
 
-// add movie to user's favorites, assuming that there's an existing (empty) list already - response text
-// only updating one piece of data - no request body needed
-app.put('/users/:userName/:favoriteMovies', (req, res) => {
-  res.status(201).send('Success in adding a new favorite movie to the favorites list.');
+// add movie to user's favorites - response in text
+app.post('/users/:id/:favoriteMovie', (req, res) => {
+  const { id, favoriteMovie } = req.params;
+  const user = users.find(user => user.id == id);
+
+  if (user) {
+    user.favorites.push(favoriteMovie);
+    res.status(201).send('Success in adding movie to favorite list.');
+  } else {
+    res.status(400).send('Movie was not added to favorite list.');
+  }
 });
 
-// delete movie off of user's favorites - response text
-app.delete('/users/:userName/:favoriteMovies', (req, res) => {
-  res.status(201).send('Success in deleting a movie off of the favorites list.');
+// delete movie off of user's favorites - response in text
+app.delete('/users/:id/:favoriteMovie', (req, res) => {
+  const { id, favoriteMovie } = req.params;
+  const user = users.find(user => user.id == id);
+
+  if (user) {
+    user.favorites = user.favorites.filter(title => title !== favoriteMovie);
+    res.status(201).send('Success in deleting movie off of favorite list.');
+  } else {
+    res.status(400).send('Movie was not deleted off of favorite list.');
+  }
 });
 
 // MOVIES
-
-// all movies - response JSON
+// read all movies - response needs to be JSON
 app.get('/movies', (req, res) => {
   res.status(200).json(movies);
   res.send('Success in returning all movie data');
-})
-
-// single movie by movie title - response JSON
-app.get('movies/:movieTitle', (req, res) => {
-  res.status(200).json(movies.movieTitle);
-  res.send('Success in returning a movie by title');
 });
 
-// movie genre by genre name - response JSON
-app.get('movies/genres/:genreName', (req, res) => {
-  res.status(200).json(movies.genre.genreDescription);
-  res.send('Success in returning a genre description');
+// single movie by movie title - response needs to be JSON
+app.get('/movies/:movieTitle', (req, res) => {
+  const { movieTitle } = req.params;
+  const movie = movies.find(movie => movie.movieTitle === movieTitle);
+
+  if (movie) {
+    res.status(201).json(movie);
+  } else {
+    res.status(400).send('The movie you are looking for cannot be found.');
+  }
 });
 
-// single director by director name - response JSON
-app.get('movies/directors/:directorName', (req, res) => {
-  res.status(200).json(movies.director.directorName);
-  res.send('Success in returning a director by name');
+// movie genre by genre name - response needs to be JSON
+app.get('/movies/genres/:genreName', (req, res) => {
+  const { genreName } = req.params;
+  const genre = movies.find(movie => movie.genre.genreName === genreName).genre;
+
+  if (genre) {
+    res.status(201).json(genre);
+  } else {
+    res.status(404).send('The genre you are looking for cannot be found.');
+  }
+});
+
+// single director by director name - response needs to be JSON
+app.get('/movies/directors/:directorName', (req, res) => {
+  const { directorName } = req.params;
+  const director = movies.find(movie => movie.director.directorName === directorName).director;
+
+  if (director) {
+    res.status(201).json(director);
+  } else {
+    res.status(404).send('The director you are looking for cannot be found.');
+  }
 });
 
 // error handling middleware
