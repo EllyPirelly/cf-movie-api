@@ -7,7 +7,7 @@ const uuid = require('uuid');
 
 const app = express();
 
-// creates write stream, logs to log file log.txt
+// creates write stream, logs to log.txt
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'log.txt'),
   {
@@ -238,26 +238,26 @@ app.put('/users/:userName', (req, res) => {
 // delete user by id - response in text
 app.delete('/users/:id', (req, res) => {
   const { id } = req.params;
-  const user = users.find(user => user.id === id);
+  const user = users.find(user => user.id === Number(id));
 
   if (user) {
-    users = users.filter(user => user.id !== id);
+    users = users.filter(user => user.id !== Number(id));
     res.status(201).send('Success in deregistering user.');
   } else {
     res.status(400).send('User not found.');
   }
 });
 
-// add movie to user's favorites - response in text
+// add (create) movie to user's favorites - response in text
 app.post('/users/:id/:favoriteMovie', (req, res) => {
   const { id, favoriteMovie } = req.params;
   const user = users.find(user => user.id == id);
 
   if (user) {
     user.favorites.push(favoriteMovie);
-    res.status(201).send('Success in adding movie to favorite list.');
+    res.status(201).send('Success in adding movie to favorites list.');
   } else {
-    res.status(400).send('Movie was not added to favorite list.');
+    res.status(400).send('Movie was not added to favorites list.');
   }
 });
 
@@ -268,9 +268,9 @@ app.delete('/users/:id/:favoriteMovie', (req, res) => {
 
   if (user) {
     user.favorites = user.favorites.filter(title => title !== favoriteMovie);
-    res.status(201).send('Success in deleting movie off of favorite list.');
+    res.status(201).send('Success in deleting movie off of favorites list.');
   } else {
-    res.status(400).send('Movie was not deleted off of favorite list.');
+    res.status(400).send('Movie was not deleted off of favorites list.');
   }
 });
 
@@ -318,21 +318,20 @@ app.get('/movies/directors/:directorName', (req, res) => {
 });
 
 // error handling middleware
-// app.use((err, req, res, next) => {
-//   console.log('error handling middleware called');
-//   console.error(err.stack);
-//   res.send('Error' + err);
-//   res.status(500).send('There seems to be an error.');
-// });
+app.use((err, req, res, next) => {
+  console.log('error handling middleware called');
+  console.error(err.stack);
+  res.status(500).send('There seems to be an error. ' + err);
+});
 
-// alternative error handling middleware
-app.use((req, res, next) => {
-  const err = new Error('Not found.');
-  console.log(err);
-  err.status = 404;
-  res.send('Route not found');
-  next(err);
-})
+// alternative error handling
+// app.use((req, res, next) => {
+//   const err = new Error('Not found.');
+//   console.log(err);
+//   err.status = 404;
+//   res.send('Route not found');
+//   next(err);
+// });
 
 // listen to port 8080
 app.listen(8080, () => {
