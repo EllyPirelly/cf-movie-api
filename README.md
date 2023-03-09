@@ -6,8 +6,10 @@ TODO
 ### Requirements
 
 - [express](https://www.npmjs.com/package/express)
-- [body-parser](https://www.npmjs.com/package/body-parser)
 - [morgan](https://www.npmjs.com/package/morgan)
+- [nodemon](https://www.npmjs.com/package/nodemon) - start with `npm start`, run/watch with `npm run dev`
+- [body-parser](https://www.npmjs.com/package/body-parser)
+- [postman](https://www.postman.com/)
 
 ### Sources
 TODO
