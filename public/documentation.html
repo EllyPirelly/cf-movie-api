@@ -57,116 +57,144 @@
           <th>Business Logic</th>
           <th>URL</th>
           <th>HTTP Method</th>
+          <th>Query Parameter</th>
           <th>Request body data format</th>
           <th>Response body data format</th>
         </thead>
 
         <tbody>
           <tr>
-            <td colspan="5">USERS</td>
+            <td colspan="6">CREATE - POST</td>
           </tr>
 
           <tr>
-            <td>Add new user</td>
+            <td>Allows new user to register</td>
             <td>/users</td>
             <td>POST</td>
+            <td>-</td>
             <td>A JSON object containing data about the user to add, structured like: <br>
               { <br>
-              "userName": "I am extra special new", <br>
-              "favorites": [ <br>
-              "super-duper movie", <br>
-              "great movie" <br>
-              ] <br>
+              "userName": "String", <br>
+              "password": "String", <br>
+              "email": "String", <br>
+              "birthDate": "Date" <br>
               } <br>
             </td>
-            <td>A JSON object containing data about the user that has been added <br>
+            <td>A JSON object containing data about the user that has been added, structured like: <br>
               { <br>
-              "userName": "I am extra special new", <br>
-              "favorites": [ <br>
-              "super-duper movie", <br>
-              "great movie" <br>
-              ], <br>
-              "id": "4ea380c7-0b12-47e1-8e39-5908b787356d" <br>
+              "userName": "Test User", <br>
+              "password": "testpassword123", <br>
+              "email": "testemail@emailprovider.com", <br>
+              "birthDate": "2010-03-12" <br>
               } <br>
             </td>
           </tr>
 
           <tr>
-            <td>Get all users</td>
+            <td>Allows user to add a movie to their favorite movies list</td>
+            <td>/users/:userName/movies/:movieid</td>
+            <td>POST</td>
+            <td>[:userName], [:movieid]</td>
+            <td>none</td>
+            <td>A JSON object containing data about updated user</td>
+          </tr>
+
+          <tr>
+            <td colspan="6">READ - GET</td>
+          </tr>
+
+          <tr>
+            <td>Returns all users</td>
             <td>/users</td>
             <td>GET</td>
+            <td>-</td>
             <td>none</td>
             <td>A JSON object containing data about all users</td>
           </tr>
 
           <tr>
-            <td>Update user (user name)</td>
-            <td>/users/[User Name]</td>
-            <td>PUT</td>
-            <td>none</td>
-            <td>A text message indicating that the user has been updated</td>
-          </tr>
-
-          <tr>
-            <td>Delete existing user (deregister)</td>
-            <td>/users/[ID]</td>
-            <td>DELETE</td>
-            <td>none</td>
-            <td>A text message indicating that a user has been removed</td>
-          </tr>
-
-          <tr>
-            <td>Add movie to user's favorites list</td>
-            <td>/users/[ID]/[Favorite Movie]</td>
-            <td>POST</td>
-            <td>none</td>
-            <td>A text message indicating that a movie has been added to user's list of favorites</td>
-          </tr>
-
-          <tr>
-            <td>Remove a movie from user's favorites list</td>
-            <td>/users/[ID]/[Favorite Movie]</td>
-            <td>DELETE</td>
-            <td>none</td>
-            <td>A test message indicating that a movie has been removed from user's list of favorites</td>
-          </tr>
-
-          <tr>
-            <td colspan="5">MOVIES</td>
-          </tr>
-
-          <tr>
-            <td>Get all movies</td>
+            <td>Returns all movies</td>
             <td>/movies</td>
             <td>GET</td>
+            <td>-</td>
             <td>none</td>
             <td>A JSON object containing data about all movies</td>
           </tr>
 
           <tr>
-            <td>Get single movie by movie title</td>
-            <td>/movies/[Movie Title]</td>
+            <td>Returns specific user by user name</td>
+            <td>/movies/:userName</td>
             <td>GET</td>
+            <td>[:userName]</td>
             <td>none</td>
-            <td>A JSON object containing data about a single movie (description, genre, director, image URL (if
-              present))
+            <td>A JSON object containing data about a specific user
             </td>
           </tr>
 
           <tr>
-            <td>Get movie genre by genre name (e.g., "Action")</td>
-            <td>/movies/[Genres]/[Genre Name]</td>
+            <td>Returns specific movie by movie title</td>
+            <td>/movies/:title</td>
             <td>GET</td>
+            <td>[:title]</td>
             <td>none</td>
-            <td>A JSON object containing data about a movie genre</td>
+            <td>A JSON object containing data about a specific movie</td>
           </tr>
 
           <tr>
-            <td>Get single director by director name</td>
-            <td>/movies/[Directors]/[Director Name]</td>
+            <td>Returns specific movie genre by genre name (e.g., "Action")</td>
+            <td>/movies/genres/:genreName</td>
             <td>GET</td>
+            <td>[:genreName]</td>
             <td>none</td>
-            <td>A JSON object containing data about a single director (bio, birth year, death year)</td>
+            <td>A JSON object containing data about a specific movie genre</td>
+          </tr>
+
+          <tr>
+            <td>Returns specific director by director name</td>
+            <td>/movies/directors/:directorName</td>
+            <td>GET</td>
+            <td>[:directorName]</td>
+            <td>none</td>
+            <td>A JSON object containing data about a specific director</td>
+          </tr>
+
+          <!-- UPDATE -->
+
+          <tr>
+            <td colspan="6">UPDATE - PUT</td>
+          </tr>
+
+          <tr>
+            <td>Allows user to update their user information</td>
+            <td>/users/:userName</td>
+            <td>PUT</td>
+            <td>[:userName]</td>
+            <td>none</td>
+            <td>A JSON object containing data about the updated user</td>
+          </tr>
+
+          <!-- DELETE -->
+
+          <tr>
+            <td colspan="6">DELETE - DELETE</td>
+          </tr>
+
+          <tr>
+            <td>Deletes existing user (deregister)</td>
+            <td>/users/:userName</td>
+            <td>DELETE</td>
+            <td>[:userName]</td>
+            <td>none</td>
+            <td>A text message indicating that a user has been removed</td>
+          </tr>
+
+          <tr>
+            <td>Deletes movie from user's favorite movies list</td>
+            <td>/users/:userName/movies/:movieid</td>
+            <td>DELETE</td>
+            <td>[:userName], [:movieId]</td>
+            <td>none</td>
+            <td>A JSON object containing data about the updated user</td>
           </tr>
         </tbody>
       </table>
