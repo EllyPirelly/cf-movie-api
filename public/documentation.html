@@ -52,152 +52,26 @@
     </section>
 
     <section>
-      <table>
-        <thead>
-          <th>Business Logic</th>
-          <th>URL</th>
-          <th>HTTP Method</th>
-          <th>Query Parameter</th>
-          <th>Request body data format</th>
-          <th>Response body data format</th>
-        </thead>
+      <h2>API documentation via Postman</h2>
 
-        <tbody>
-          <tr>
-            <td colspan="6">CREATE - POST</td>
-          </tr>
+      <div>
+        <p>As we are testing all endpoints via Postman it makes sense to also have auto-generated API documentation
+          there. Please take a look at this <a href="https://documenter.getpostman.com/view/26201251/2s93JwP2hD">WIP API
+            on Postman</a>.</p>
+        <h3>Why WIP?</h3>
+        <p>The API documentation needs some clean-up and more "abstract" endpoints.</p>
+        <p>As all of my endpoints do work at the time of writing, it should be fairly easy to update them as we go
+          further with the exercise.</p>
 
-          <tr>
-            <td>Allows new user to register</td>
-            <td>/users</td>
-            <td>POST</td>
-            <td>-</td>
-            <td>A JSON object containing data about the user to add, structured like: <br>
-              { <br>
-              "userName": "String", <br>
-              "password": "String", <br>
-              "email": "String", <br>
-              "birthDate": "Date" <br>
-              } <br>
-            </td>
-            <td>A JSON object containing data about the user that has been added, structured like: <br>
-              { <br>
-              "userName": "Test User", <br>
-              "password": "testpassword123", <br>
-              "email": "testemail@emailprovider.com", <br>
-              "birthDate": "2010-03-12" <br>
-              } <br>
-            </td>
-          </tr>
+        <h3>Why the deletion of the info table that was previously in here?</h3>
+        <p>There is no need to manually maintain endpoints/API info within said table, so I deleted it.</p>
 
-          <tr>
-            <td>Allows user to add a movie to their favorite movies list</td>
-            <td>/users/:userName/movies/:movieid</td>
-            <td>POST</td>
-            <td>[:userName], [:movieid]</td>
-            <td>none</td>
-            <td>A JSON object containing data about updated user</td>
-          </tr>
-
-          <tr>
-            <td colspan="6">READ - GET</td>
-          </tr>
-
-          <tr>
-            <td>Returns all users</td>
-            <td>/users</td>
-            <td>GET</td>
-            <td>-</td>
-            <td>none</td>
-            <td>A JSON object containing data about all users</td>
-          </tr>
-
-          <tr>
-            <td>Returns all movies</td>
-            <td>/movies</td>
-            <td>GET</td>
-            <td>-</td>
-            <td>none</td>
-            <td>A JSON object containing data about all movies</td>
-          </tr>
-
-          <tr>
-            <td>Returns specific user by user name</td>
-            <td>/movies/:userName</td>
-            <td>GET</td>
-            <td>[:userName]</td>
-            <td>none</td>
-            <td>A JSON object containing data about a specific user
-            </td>
-          </tr>
-
-          <tr>
-            <td>Returns specific movie by movie title</td>
-            <td>/movies/:title</td>
-            <td>GET</td>
-            <td>[:title]</td>
-            <td>none</td>
-            <td>A JSON object containing data about a specific movie</td>
-          </tr>
-
-          <tr>
-            <td>Returns specific movie genre by genre name (e.g., "Action")</td>
-            <td>/movies/genres/:genreName</td>
-            <td>GET</td>
-            <td>[:genreName]</td>
-            <td>none</td>
-            <td>A JSON object containing data about a specific movie genre</td>
-          </tr>
-
-          <tr>
-            <td>Returns specific director by director name</td>
-            <td>/movies/directors/:directorName</td>
-            <td>GET</td>
-            <td>[:directorName]</td>
-            <td>none</td>
-            <td>A JSON object containing data about a specific director</td>
-          </tr>
-
-          <!-- UPDATE -->
-
-          <tr>
-            <td colspan="6">UPDATE - PUT</td>
-          </tr>
-
-          <tr>
-            <td>Allows user to update their user information</td>
-            <td>/users/:userName</td>
-            <td>PUT</td>
-            <td>[:userName]</td>
-            <td>none</td>
-            <td>A JSON object containing data about the updated user</td>
-          </tr>
-
-          <!-- DELETE -->
-
-          <tr>
-            <td colspan="6">DELETE - DELETE</td>
-          </tr>
-
-          <tr>
-            <td>Deletes existing user (deregister)</td>
-            <td>/users/:userName</td>
-            <td>DELETE</td>
-            <td>[:userName]</td>
-            <td>none</td>
-            <td>A text message indicating that a user has been removed</td>
-          </tr>
-
-          <tr>
-            <td>Deletes movie from user's favorite movies list</td>
-            <td>/users/:userName/movies/:movieid</td>
-            <td>DELETE</td>
-            <td>[:userName], [:movieId]</td>
-            <td>none</td>
-            <td>A JSON object containing data about the updated user</td>
-          </tr>
-        </tbody>
-      </table>
+        <h3>Sources how to set up API documentation in Postman</h3>
+        <a href="https://www.youtube.com/watch?v=Ayo_KdLLcTA">API documentation with Postman - this one is a bit
+          older.</a> <br>
+        <a href="https://www.youtube.com/watch?v=XNVo9WkCoak">API Documentation | The Exploratory - this one is a bit
+          newer</a>
+      </div>
     </section>
   </body>
 
