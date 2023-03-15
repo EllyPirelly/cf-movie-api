@@ -26,8 +26,8 @@ const accessLogStream = fs.createWriteStream(
   }
 );
 
-// app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
@@ -43,7 +43,7 @@ app.get('/documentation', (req, res) => {
 
 // CREATE
 
-// add user object
+// post / add user
 // we expect JSON in this format
 // {
 //   id: Integer,
@@ -66,42 +66,37 @@ app.post('/users', (req, res) => {
         birthDate: req.body.birthDate
       }).then((user) => {
         res.status(201).json(user)
-      }).catch((error) => {
-        console.error(error);
-        res.status(500).send('Error: ' + error);
+      }).catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
       })
     }
-  }).catch((error) => {
-    console.error(error);
-    res.status(500).send('Error: ' + error);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
 });
 
-// add movie via movieid to user's favorites list
+// post / add movie via movieid to user's favorites list
 app.post('/users/:userName/movies/:movieid', (req, res) => {
-  Users.findOneAndUpdate({
-    userName: req.params.userName
-  },
+  Users.findOneAndUpdate(
+    {
+      userName: req.params.userName
+    },
     {
       $push: {
         favoriteMovies: req.params.movieid
       }
     },
-    // to specify that you want your callback function to take the updated object as a parameter
-    // makes sure that updated document is returned
     {
       new: true
-    },
-    // callback function
-    // TODO: change this to .then and .catch
-    (err, updatedUser) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      } else {
-        res.json(updatedUser);
-      }
-    });
+    }
+  ).then((updatedUser) => {
+    res.json(updatedUser);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
 // READ
@@ -185,9 +180,10 @@ app.get('/movies/directors/:directorName', (req, res) => {
 //   birthDate: Date
 // }
 app.put('/users/:userName', (req, res) => {
-  Users.findOneAndUpdate({
-    userName: req.params.userName
-  },
+  Users.findOneAndUpdate(
+    {
+      userName: req.params.userName
+    },
     {
       $set: {
         userName: req.body.userName,
@@ -196,21 +192,15 @@ app.put('/users/:userName', (req, res) => {
         birthDate: req.body.birthDate
       }
     },
-    // to specify that you want your callback function to take the updated object as a parameter
-    // makes sure that updated document is returned
     {
       new: true
-    },
-    // callback function
-    // TODO: change this to .then and .catch
-    (err, updatedUser) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      } else {
-        res.json(updatedUser);
-      }
-    });
+    }
+  ).then((updatedUser) => {
+    res.json(updatedUser);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
 // DELETE
@@ -233,29 +223,24 @@ app.delete('/users/:userName', (req, res) => {
 
 // delete movie via movieid off of user's favorites list
 app.delete('/users/:userName/movies/:movieid', (req, res) => {
-  Users.findOneAndUpdate({
-    userName: req.params.userName
-  },
+  Users.findOneAndUpdate(
+    {
+      userName: req.params.userName
+    },
     {
       $pull: {
         favoriteMovies: req.params.movieid
       }
     },
-    // to specify that you want your callback function to take the updated object as a parameter
-    // makes sure that updated document is returned
     {
       new: true
-    },
-    // callback function
-    // TODO: change this to .then and .catch
-    (err, updatedUser) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      } else {
-        res.json(updatedUser);
-      }
-    });
+    }
+  ).then((updatedUser) => {
+    res.json(updatedUser);
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
 // error handling middleware
