@@ -26,8 +26,9 @@ const accessLogStream = fs.createWriteStream(
   }
 );
 
-// app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// needed to comment out urlencoded AGAIN to have this work...
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
@@ -117,14 +118,16 @@ app.get('/users', (req, res) => {
 });
 
 // get all movies
-app.get('/movies', (req, res) => {
-  Movies.find().then((movies) => {
-    res.status(201).json(movies);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  });
-});
+app.get('/movies',
+  passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.find().then((movies) => {
+      res.status(201).json(movies);
+    }).catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+  }
+);
 
 // get a specific user by userName
 app.get('/users/:userName', (req, res) => {
