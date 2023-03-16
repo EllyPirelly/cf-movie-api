@@ -52,124 +52,26 @@
     </section>
 
     <section>
-      <table>
-        <thead>
-          <th>Business Logic</th>
-          <th>URL</th>
-          <th>HTTP Method</th>
-          <th>Request body data format</th>
-          <th>Response body data format</th>
-        </thead>
+      <h2>API documentation via Postman</h2>
 
-        <tbody>
-          <tr>
-            <td colspan="5">USERS</td>
-          </tr>
+      <div>
+        <p>As we are testing all endpoints via Postman it makes sense to also have auto-generated API documentation
+          there. Please take a look at this <a href="https://documenter.getpostman.com/view/26201251/2s93JwP2hD">WIP API
+            on Postman</a>.</p>
+        <h3>Why WIP?</h3>
+        <p>The API documentation needs some clean-up and more "abstract" endpoints.</p>
+        <p>As all of my endpoints do work at the time of writing, it should be fairly easy to update them as we go
+          further with the exercise.</p>
 
-          <tr>
-            <td>Add new user</td>
-            <td>/users</td>
-            <td>POST</td>
-            <td>A JSON object containing data about the user to add, structured like: <br>
-              { <br>
-              "userName": "I am extra special new", <br>
-              "favorites": [ <br>
-              "super-duper movie", <br>
-              "great movie" <br>
-              ] <br>
-              } <br>
-            </td>
-            <td>A JSON object containing data about the user that has been added <br>
-              { <br>
-              "userName": "I am extra special new", <br>
-              "favorites": [ <br>
-              "super-duper movie", <br>
-              "great movie" <br>
-              ], <br>
-              "id": "4ea380c7-0b12-47e1-8e39-5908b787356d" <br>
-              } <br>
-            </td>
-          </tr>
+        <h3>Why the deletion of the info table that was previously in here?</h3>
+        <p>There is no need to manually maintain endpoints/API info within said table, so I deleted it.</p>
 
-          <tr>
-            <td>Get all users</td>
-            <td>/users</td>
-            <td>GET</td>
-            <td>none</td>
-            <td>A JSON object containing data about all users</td>
-          </tr>
-
-          <tr>
-            <td>Update user (user name)</td>
-            <td>/users/[User Name]</td>
-            <td>PUT</td>
-            <td>none</td>
-            <td>A text message indicating that the user has been updated</td>
-          </tr>
-
-          <tr>
-            <td>Delete existing user (deregister)</td>
-            <td>/users/[ID]</td>
-            <td>DELETE</td>
-            <td>none</td>
-            <td>A text message indicating that a user has been removed</td>
-          </tr>
-
-          <tr>
-            <td>Add movie to user's favorites list</td>
-            <td>/users/[ID]/[Favorite Movie]</td>
-            <td>POST</td>
-            <td>none</td>
-            <td>A text message indicating that a movie has been added to user's list of favorites</td>
-          </tr>
-
-          <tr>
-            <td>Remove a movie from user's favorites list</td>
-            <td>/users/[ID]/[Favorite Movie]</td>
-            <td>DELETE</td>
-            <td>none</td>
-            <td>A test message indicating that a movie has been removed from user's list of favorites</td>
-          </tr>
-
-          <tr>
-            <td colspan="5">MOVIES</td>
-          </tr>
-
-          <tr>
-            <td>Get all movies</td>
-            <td>/movies</td>
-            <td>GET</td>
-            <td>none</td>
-            <td>A JSON object containing data about all movies</td>
-          </tr>
-
-          <tr>
-            <td>Get single movie by movie title</td>
-            <td>/movies/[Movie Title]</td>
-            <td>GET</td>
-            <td>none</td>
-            <td>A JSON object containing data about a single movie (description, genre, director, image URL (if
-              present))
-            </td>
-          </tr>
-
-          <tr>
-            <td>Get movie genre by genre name (e.g., "Action")</td>
-            <td>/movies/[Genres]/[Genre Name]</td>
-            <td>GET</td>
-            <td>none</td>
-            <td>A JSON object containing data about a movie genre</td>
-          </tr>
-
-          <tr>
-            <td>Get single director by director name</td>
-            <td>/movies/[Directors]/[Director Name]</td>
-            <td>GET</td>
-            <td>none</td>
-            <td>A JSON object containing data about a single director (bio, birth year, death year)</td>
-          </tr>
-        </tbody>
-      </table>
+        <h3>Sources how to set up API documentation in Postman</h3>
+        <a href="https://www.youtube.com/watch?v=Ayo_KdLLcTA">API documentation with Postman - this one is a bit
+          older.</a> <br>
+        <a href="https://www.youtube.com/watch?v=XNVo9WkCoak">API Documentation | The Exploratory - this one is a bit
+          newer</a>
+      </div>
     </section>
   </body>
 
