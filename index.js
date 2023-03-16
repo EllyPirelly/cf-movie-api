@@ -26,10 +26,15 @@ const accessLogStream = fs.createWriteStream(
   }
 );
 
-app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
+
+// AUTH
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
 
 // GENERAL
 
