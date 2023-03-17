@@ -16,27 +16,25 @@ passport.use(new LocalStrategy(
   (userName, password, callback) => {
     console.log(userName + ' ' + password);
 
-    Users.fineOne(
+    Users.findOne(
       {
         userName: userName
-      },
-      (err, user) => {
-        if (err) {
-          console.log(err);
-          return callback(err);
-        }
-
-        if (!user) {
-          console.log('Incorrect username.');
-          return callback(null, false, {
-            message: 'Incorrect username or password.'
-          });
-        }
-
-        console.log('finished');
-        return callback(null, user);
       }
-    );
+    ).then((user) => {
+      if (!user) {
+        console.log('Incorrect username.');
+        return callback(null, false, {
+          message: 'Incorrect username or password.'
+        });
+      }
+
+      console.log('finished');
+      return callback(null, user);
+
+    }).catch((err) => {
+      console.log(err);
+      return callback(err);
+    });
   }
 ));
 
