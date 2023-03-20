@@ -234,7 +234,26 @@ app.get('/movies/directors/:directorName',
 //   birthDate: Date
 // }
 app.put('/users/:userName',
+  [
+    check('userName', 'Username is required.').isLength({ min: 5 }),
+    check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('password', 'Password is required.').not().isEmpty(),
+    check('email', 'Email does not appear to be valid.').isEmail(),
+  ],
   passport.authenticate('jwt', { session: false }), (req, res) => {
+
+    // checks validation object for errors
+    let errors = validationResult(req);
+
+    // if any error the rest of the code will not execute
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        errors: errors.array()
+      });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.password);
+
     Users.findOneAndUpdate(
       {
         userName: req.params.userName
@@ -242,7 +261,7 @@ app.put('/users/:userName',
       {
         $set: {
           userName: req.body.userName,
-          password: req.body.password,
+          password: hashedPassword,
           email: req.body.email,
           birthDate: req.body.birthDate
         }
