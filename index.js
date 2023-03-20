@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const uuid = require('uuid');
-
+const { check, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
@@ -76,32 +76,52 @@ app.get('/documentation', (req, res) => {
 //   email: String,
 //   birthDate: Date
 // }
-app.post('/users', (req, res) => {
-  let hashedPassword = Users.hashPassword(req.body.password);
+app.post('/users',
+  [
+    check('userName', 'Username is required.').isLength({ min: 5 }),
+    check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('password', 'Password is required.').not().isEmpty(),
+    check('email', 'Email does not appear to be valid.').isEmail(),
+  ], (req, res) => {
 
-  Users.findOne({
-    userName: req.body.userName
-  }).then((user) => {
-    if (user) {
-      return res.status(400).send(req.body.userName + 'already exists');
-    } else {
-      Users.create({
-        userName: req.body.userName,
-        password: hashedPassword,
-        email: req.body.email,
-        birthDate: req.body.birthDate
-      }).then((user) => {
-        res.status(201).json(user)
-      }).catch((err) => {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      })
+    // checks validation object for errors
+    let errors = validationResult(req);
+
+    // if any error the rest of the code will not execute
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        errors: errors.array()
+      });
     }
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
+
+    let hashedPassword = Users.hashPassword(req.body.password);
+
+    Users.findOne({
+      // does user already exist
+      userName: req.body.userName
+    }).then((user) => {
+      if (user) {
+        // if yes:
+        return res.status(400).send(req.body.userName + 'already exists');
+      } else {
+        // if no, create
+        Users.create({
+          userName: req.body.userName,
+          password: hashedPassword,
+          email: req.body.email,
+          birthDate: req.body.birthDate
+        }).then((user) => {
+          res.status(201).json(user)
+        }).catch((err) => {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+        })
+      }
+    }).catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
   });
-});
 
 // post / add movie via movieid to user's favorites list
 app.post('/users/:userName/movies/:movieid',
