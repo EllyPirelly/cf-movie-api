@@ -77,6 +77,8 @@ app.get('/documentation', (req, res) => {
 //   birthDate: Date
 // }
 app.post('/users', (req, res) => {
+  let hashedPassword = Users.hashPassword(req.body.password);
+
   Users.findOne({
     userName: req.body.userName
   }).then((user) => {
@@ -85,7 +87,7 @@ app.post('/users', (req, res) => {
     } else {
       Users.create({
         userName: req.body.userName,
-        password: req.body.password,
+        password: hashedPassword,
         email: req.body.email,
         birthDate: req.body.birthDate
       }).then((user) => {
