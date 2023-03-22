@@ -2,7 +2,8 @@
 
 ### What is this about?
 RESTful API for movie lovers that want to be able to access information about different movies, genres, directors... <br>
-Build in MERN stack - MongoDB, Express.js, React, Node.js.
+It's the "M", "E" and "N" from the MERN stack (MongoDB, Express.js, React, Node.js). <br>
+[Find the "R" here.](https://github.com/EllyPirelly/cf-movie-client)
 
 This RESTful API was built split into several tasks for Achievement 2 and 3 in [Career Foundry's Full-Stack Web Development Program](https://careerfoundry.com/en/courses/become-a-web-developer/).
 
@@ -16,10 +17,10 @@ This RESTful API was built split into several tasks for Achievement 2 and 3 in [
   - code first approch: first design endpoints, then design database
 - the business logic must be modeled with Mongoose
 - API must be tested in Postman
+- API must include user authentication and authorization
+- API must include data validation logic
+- API must meet data security regulations
 - WIP:
-  - API must include user authentication and authorization
-  - API must include data validation logic
-  - API must meet data security regulations
   - API must be documented (Postman)
 
 ### API functionality
@@ -138,8 +139,15 @@ Work in Progress! https://documenter.getpostman.com/view/26201251/2s93JwP2hD
 - go to Postman (either browser or app)
 - test
 
-#### React
-- TO COME
+#### CORS
+- Cross-Origin Resource Sharing
+- to control which domains have access to the API
+
+#### bcrypt
+- to hash passwords
+
+#### express-validator
+- for server-side input validation
 
 ### How to run this?
 - clone project
