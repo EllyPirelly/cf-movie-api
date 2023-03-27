@@ -11,11 +11,22 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
+const dotenv = require('dotenv');
+dotenv.config();
+const database = process.env.CONNECTION_URI;
+
 // to connect to database
-mongoose.connect(process.env.CONNECTION_URI, {
+// test
+mongoose.connect(database, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
+// does not work
+// mongoose.connect(process.env.CONNECTION_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
 
 // to connect locally to database
 // mongoose.connect('mongodb://localhost:27017/moviepooldb', {
