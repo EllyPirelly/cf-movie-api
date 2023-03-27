@@ -15,14 +15,13 @@ const dotenv = require('dotenv');
 dotenv.config();
 const database = process.env.CONNECTION_URI;
 
-// to connect to database
-// test
+// to connect to MongoDB Atlas database
 mongoose.connect(database, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
-// does not work
+// to connect to MongoDB Atlas database - does not work
 // mongoose.connect(process.env.CONNECTION_URI, {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true
@@ -44,9 +43,9 @@ const accessLogStream = fs.createWriteStream(
   }
 );
 
-// needed to comment out urlencoded AGAIN to have this work...
+// test - comment in both bodyParsers
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
@@ -98,6 +97,8 @@ app.post('/users',
   [
     check('userName', 'Username is required.').isLength({ min: 5 }),
     check('userName', 'Username contains non-alphanumeric characters - not allowed.').not().isEmpty(),
+    // for whatever reason, isAlphanumeric is giving me a 422 error in postman
+    // changed this for the moment to dig deeper into this as we go (TODO)
     // check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
     check('password', 'Password is required.').not().isEmpty(),
     check('email', 'Email does not appear to be valid.').isEmail(),
