@@ -97,7 +97,8 @@ app.get('/documentation', (req, res) => {
 app.post('/users',
   [
     check('userName', 'Username is required.').isLength({ min: 5 }),
-    check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('userName', 'Username contains non-alphanumeric characters - not allowed.').not().isEmpty(),
+    // check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
     check('password', 'Password is required.').not().isEmpty(),
     check('email', 'Email does not appear to be valid.').isEmail(),
   ], (req, res) => {
