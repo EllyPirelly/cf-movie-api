@@ -1,12 +1,14 @@
-const express = require('express');
-const morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
-const bodyParser = require('body-parser');
-const uuid = require('uuid');
+const bodyParser = require('body-parser'),
+  fs = require('fs'),
+  path = require('path'),
+  express = require('express'),
+  mongoose = require('mongoose'),
+  morgan = require('morgan'),
+  cors = require('cors'),
+  uuid = require('uuid'),
+  Models = require('./models.js');
+
 const { check, validationResult } = require('express-validator');
-const mongoose = require('mongoose');
-const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -15,42 +17,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 const database = process.env.CONNECTION_URI;
 
-// to connect to MongoDB Atlas database
-mongoose.connect(database, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-// to connect to MongoDB Atlas database - does not work, URI string error
-// mongoose.connect(process.env.CONNECTION_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
-
-// to connect locally to database
-// mongoose.connect('mongodb://localhost:27017/moviepooldb', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
-
 const app = express();
-
-// creates write stream, logs to log.txt
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'log.txt'),
-  {
-    flags: 'a'
-  }
-);
 
 // test - comment in both bodyParsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('common', { stream: accessLogStream }));
-app.use(express.static('public'));
-
-// AUTH
-const cors = require('cors');
 
 // default -  all origins have access
 app.use(cors());
@@ -72,6 +43,34 @@ app.use(cors());
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
+
+// creates write stream, logs to log.txt - TODO: delete
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'log.txt'),
+  { flags: 'a' }
+);
+
+app.use(morgan('combined', { stream: accessLogStream }));
+app.use(express.static('public'));
+
+// connect to MongoDB Atlas database via .env variable
+mongoose.connect(database, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+mongoose.set('strictQuery', false);
+
+// connect to MongoDB Atlas database - does not work, URI string error
+// mongoose.connect(process.env.CONNECTION_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
+
+// connect locally to database
+// mongoose.connect('mongodb://localhost:27017/moviepooldb', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
 
 // GENERAL
 
@@ -103,14 +102,12 @@ app.post('/users',
       .withMessage('Email does not appear to be valid.'),
   ], (req, res) => {
 
-    // checks validation object for errors
+    // check validation object for errors
     let errors = validationResult(req);
 
     // if any error the rest of the code will not execute
     if (!errors.isEmpty()) {
-      return res.status(422).json({
-        errors: errors.array()
-      });
+      return res.status(422).json({ errors: errors.array() });
     }
 
     let hashedPassword = Users.hashPassword(req.body.password);
@@ -121,7 +118,7 @@ app.post('/users',
     }).then((user) => {
       if (user) {
         // if yes:
-        return res.status(400).send(req.body.userName + 'already exists');
+        return res.status(400).send(req.body.userName + ' already exists');
       } else {
         // if no, create
         Users.create({
@@ -146,17 +143,9 @@ app.post('/users',
 app.post('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
-      {
-        userName: req.params.userName
-      },
-      {
-        $push: {
-          favoriteMovies: req.params.movieid
-        }
-      },
-      {
-        new: true
-      }
+      { userName: req.params.userName },
+      { $push: { favoriteMovies: req.params.movieid } },
+      { new: true }
     ).then((updatedUser) => {
       res.json(updatedUser);
     }).catch((err) => {
@@ -247,10 +236,19 @@ app.get('/movies/directors/:directorName',
 // update user by userName
 app.put('/users/:userName',
   [
-    check('userName', 'Username is required.').isLength({ min: 5 }),
-    check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('password', 'Password is required.').not().isEmpty(),
-    check('email', 'Email does not appear to be valid.').isEmail(),
+    check('userName')
+      .isLength({ min: 5 })
+      .withMessage('Username is required.')
+      .isAlphanumeric()
+      .withMessage('Username contains non-alphanumeric characters - not allowed.')
+      .not().isEmpty()
+      .withMessage('Username must not be empty.'),
+    check('password')
+      .not().isEmpty()
+      .withMessage('Password is required.'),
+    check('email')
+      .isEmail()
+      .withMessage('Email does not appear to be valid.'),
   ],
   passport.authenticate('jwt', { session: false }), (req, res) => {
 
@@ -267,9 +265,7 @@ app.put('/users/:userName',
     let hashedPassword = Users.hashPassword(req.body.password);
 
     Users.findOneAndUpdate(
-      {
-        userName: req.params.userName
-      },
+      { userName: req.params.userName },
       {
         $set: {
           userName: req.body.userName,
@@ -278,9 +274,7 @@ app.put('/users/:userName',
           birthDate: req.body.birthDate
         }
       },
-      {
-        new: true
-      }
+      { new: true }
     ).then((updatedUser) => {
       res.json(updatedUser);
     }).catch((err) => {
@@ -312,17 +306,13 @@ app.delete('/users/:userName',
 app.delete('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
-      {
-        userName: req.params.userName
-      },
+      { userName: req.params.userName },
       {
         $pull: {
           favoriteMovies: req.params.movieid
         }
       },
-      {
-        new: true
-      }
+      { new: true }
     ).then((updatedUser) => {
       res.json(updatedUser);
     }).catch((err) => {
