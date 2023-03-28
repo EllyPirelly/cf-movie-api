@@ -21,7 +21,7 @@ mongoose.connect(database, {
   useUnifiedTopology: true
 });
 
-// to connect to MongoDB Atlas database - does not work
+// to connect to MongoDB Atlas database - does not work, URI string error
 // mongoose.connect(process.env.CONNECTION_URI, {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true
@@ -95,13 +95,19 @@ app.get('/documentation', (req, res) => {
 // }
 app.post('/users',
   [
-    check('userName', 'Username is required.').isLength({ min: 5 }),
-    check('userName', 'Username contains non-alphanumeric characters - not allowed.').not().isEmpty(),
-    // for whatever reason, isAlphanumeric is giving me a 422 error in postman
-    // changed this for the moment to dig deeper into this as we go (TODO)
-    // check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('password', 'Password is required.').not().isEmpty(),
-    check('email', 'Email does not appear to be valid.').isEmail(),
+    check('userName')
+      .isLength({ min: 5 })
+      .withMessage('Username must be at least 5 characters long.')
+      .isAlphanumeric()
+      .withMessage('Username contains non-alphanumeric characters - not allowed.')
+      .not().isEmpty()
+      .withMessage('Username must not be empty.'),
+    check('password')
+      .not().isEmpty()
+      .withMessage('Password is required.'),
+    check('email')
+      .isEmail()
+      .withMessage('Email does not appear to be valid.'),
   ], (req, res) => {
 
     // checks validation object for errors
