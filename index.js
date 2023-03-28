@@ -54,6 +54,7 @@ const cors = require('cors');
 
 // default -  all origins have access
 app.use(cors());
+
 // only CERTAIN origins have access
 // let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 // app use(cors({
@@ -85,14 +86,6 @@ app.get('/documentation', (req, res) => {
 // CREATE
 
 // post / add user
-// we expect JSON in this format
-// {
-//   id: Integer,
-//   userName: String,
-//   password: String,
-//   email: String,
-//   birthDate: Date
-// }
 app.post('/users',
   [
     check('userName')
@@ -252,13 +245,6 @@ app.get('/movies/directors/:directorName',
 // UPDATE
 
 // update user by userName
-// we expect JSON in this format
-// {
-//   userName: String, (required)
-//   password: String, (required)
-//   email: String, (required)
-//   birthDate: Date
-// }
 app.put('/users/:userName',
   [
     check('userName', 'Username is required.').isLength({ min: 5 }),
@@ -351,20 +337,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('There seems to be an error. ' + err);
 });
-
-// alternative error handling
-// app.use((req, res, next) => {
-//   const err = new Error('Not found.');
-//   console.log(err);
-//   err.status = 404;
-//   res.send('Route not found');
-//   next(err);
-// });
-
-// listen to port 8080
-// app.listen(8080, () => {
-//   console.log('Your app is listening on port 8080.');
-// });
 
 const port = process.env.PORT || 8080;
 
