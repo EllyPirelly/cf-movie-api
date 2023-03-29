@@ -54,16 +54,22 @@ passport.use(
       Users.findOne({ userName: username })
         .then((user) => {
           if (!user) {
-            console.log('Incorrect username or password.');
+            console.log('Incorrect username.');
             return callback(null, false, {
-              message: 'Incorrect username or password.'
+              message: 'Incorrect username.'
+            });
+          }
+          if (!user.validatePassword(password)) {
+            console.log('Incorrect password');
+            return callback(null, false, {
+              message: 'Incorrect password.'
             });
           }
           console.log('finished');
           return callback(null, user);
-        }).catch((err) => {
-          console.log(err);
-          return callback(err, false);
+        }).catch((error) => {
+          console.log(error);
+          return callback(error, false);
         });
     }
   ));

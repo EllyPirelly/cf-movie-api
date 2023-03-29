@@ -18,6 +18,8 @@ let generateJWToken = (user) => {
 
 // POST - login
 module.exports = (router) => {
+  // TODO: check, if this caused the issue
+  router.use(passport.initialize());
   router.post('/login', (req, res) => {
     passport.authenticate(
       'local',
@@ -26,7 +28,7 @@ module.exports = (router) => {
         if (error || !user) {
           return res.status(400).json({
             message: 'Something is not right.',
-            user: user,
+            user: user
           });
         }
         req.login(user, { session: false }, (error) => {

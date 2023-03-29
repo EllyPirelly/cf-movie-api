@@ -50,7 +50,8 @@ const accessLogStream = fs.createWriteStream(
   { flags: 'a' }
 );
 
-app.use(morgan('combined', { stream: accessLogStream }));
+// TODO: change back to common, as before
+app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
 // connect to MongoDB Atlas database via .env variable
@@ -147,7 +148,7 @@ app.post('/users/:userName/movies/:movieid',
       { $push: { favoriteMovies: req.params.movieid } },
       { new: true }
     ).then((updatedUser) => {
-      res.json(updatedUser);
+      res.status(201).json(updatedUser);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -185,7 +186,7 @@ app.get('/users/:userName',
     Users.findOne({
       userName: req.params.userName
     }).then((user) => {
-      res.json(user);
+      res.status(201).json(user);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -198,7 +199,7 @@ app.get('/movies/:title',
     Movies.findOne({
       title: req.params.title
     }).then((movie) => {
-      res.json(movie);
+      res.status(201).json(movie);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -211,7 +212,7 @@ app.get('/movies/genres/:genreName',
     Movies.findOne({
       'genre.genreName': req.params.genreName
     }).then((movie) => {
-      res.json(movie.genre);
+      res.status(201).json(movie.genre);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -224,7 +225,7 @@ app.get('/movies/directors/:directorName',
     Movies.findOne({
       'director.directorName': req.params.directorName
     }).then((movie) => {
-      res.json(movie.director);
+      res.status(201).json(movie.director);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -276,7 +277,7 @@ app.put('/users/:userName',
       },
       { new: true }
     ).then((updatedUser) => {
-      res.json(updatedUser);
+      res.status(201).json(updatedUser);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
