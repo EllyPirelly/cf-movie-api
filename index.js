@@ -171,16 +171,16 @@ app.get('/users',
   });
 
 // get all movies
-// temporary change
-// passport.authenticate('jwt', { session: false }), (req, res) => {
-app.get('/movies', (req, res) => {
-  Movies.find().then((movies) => {
-    res.status(200).json(movies);
-  }).catch((err) => {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  });
-});
+app.get('/movies',
+  passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.find().then((movies) => {
+      res.status(200).json(movies);
+    }).catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+  }
+);
 
 // get a specific user by userName
 app.get('/users/:userName',
