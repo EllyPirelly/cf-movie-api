@@ -18,7 +18,6 @@ let generateJWToken = (user) => {
 
 // POST - login
 module.exports = (router) => {
-  // TODO: check, if this caused the issue
   router.use(passport.initialize());
   router.post('/login', (req, res) => {
     passport.authenticate(
@@ -27,7 +26,7 @@ module.exports = (router) => {
       (error, user, info) => {
         if (error || !user) {
           return res.status(400).json({
-            message: 'Something is not right.',
+            message: info,
             user: user
           });
         }
@@ -36,7 +35,7 @@ module.exports = (router) => {
             res.send(error);
           }
           let token = generateJWToken(user.toJSON());
-          return res.json({ user, token });
+          return res.json({ user: { userName: user.userName, email: user.email }, token });
         });
       }
     )(req, res);

@@ -19,11 +19,10 @@ const database = process.env.CONNECTION_URI;
 
 const app = express();
 
-// test - comment in both bodyParsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// default -  all origins have access
+// ALL origins have access (default)
 app.use(cors());
 
 // only CERTAIN origins have access
@@ -44,13 +43,12 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-// creates write stream, logs to log.txt - TODO: delete
+// TODO: delete - create write stream, log to log.txt
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'log.txt'),
   { flags: 'a' }
 );
 
-// TODO: change back to common, as before
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
@@ -108,7 +106,9 @@ app.post('/users',
 
     // if any error the rest of the code will not execute
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({
+        errors: errors.array()
+      });
     }
 
     let hashedPassword = Users.hashPassword(req.body.password);
@@ -119,7 +119,7 @@ app.post('/users',
     }).then((user) => {
       if (user) {
         // if yes:
-        return res.status(400).send(req.body.userName + ' already exists');
+        return res.status(400).send(req.body.userName + ' already exists.');
       } else {
         // if no, create
         Users.create({
@@ -145,7 +145,9 @@ app.post('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
       { userName: req.params.userName },
-      { $push: { favoriteMovies: req.params.movieid } },
+      {
+        $push: { favoriteMovies: req.params.movieid }
+      },
       { new: true }
     ).then((updatedUser) => {
       res.status(201).json(updatedUser);
@@ -161,7 +163,7 @@ app.post('/users/:userName/movies/:movieid',
 app.get('/users',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find().then((users) => {
-      res.status(201).json(users);
+      res.status(200).json(users);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -172,7 +174,7 @@ app.get('/users',
 app.get('/movies',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find().then((movies) => {
-      res.status(201).json(movies);
+      res.status(200).json(movies);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -186,7 +188,7 @@ app.get('/users/:userName',
     Users.findOne({
       userName: req.params.userName
     }).then((user) => {
-      res.status(201).json(user);
+      res.status(200).json(user);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -199,7 +201,7 @@ app.get('/movies/:title',
     Movies.findOne({
       title: req.params.title
     }).then((movie) => {
-      res.status(201).json(movie);
+      res.status(200).json(movie);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -212,7 +214,7 @@ app.get('/movies/genres/:genreName',
     Movies.findOne({
       'genre.genreName': req.params.genreName
     }).then((movie) => {
-      res.status(201).json(movie.genre);
+      res.status(200).json(movie.genre);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -225,7 +227,7 @@ app.get('/movies/directors/:directorName',
     Movies.findOne({
       'director.directorName': req.params.directorName
     }).then((movie) => {
-      res.status(201).json(movie.director);
+      res.status(200).json(movie.director);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -293,7 +295,7 @@ app.delete('/users/:userName',
       userName: req.params.userName
     }).then((user) => {
       if (!user) {
-        res.status(400).send(req.params.userName + ' was not found');
+        res.status(400).send(req.params.userName + ' was not found.');
       } else {
         res.status(200).send(req.params.userName + ' was deleted.');
       }
@@ -324,7 +326,7 @@ app.delete('/users/:userName/movies/:movieid',
 
 // error handling middleware
 app.use((err, req, res, next) => {
-  console.log('error handling middleware called');
+  console.log('Error handling middleware called.');
   console.error(err.stack);
   res.status(500).send('There seems to be an error. ' + err);
 });

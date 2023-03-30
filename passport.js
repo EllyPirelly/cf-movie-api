@@ -7,8 +7,7 @@ let Users = Models.User,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
 
-// basic HTTP authentication for login
-// bugfix: tying the old way of password.use
+// TODO: delete - bugfix: tying the old way of password.use
 // passport.use(new LocalStrategy(
 //   {
 //     usernameField: 'userName',
@@ -42,6 +41,7 @@ let Users = Models.User,
 //   }
 // ));
 
+// basic HTTP authentication for login
 // promises
 passport.use(
   new LocalStrategy(
