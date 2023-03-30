@@ -2,6 +2,9 @@
 .DS_Store
 */.DS_Store
 
+# Ignore .env files
+.env
+
 # vscode
 .history/
 .vscode/

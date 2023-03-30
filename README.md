@@ -69,7 +69,7 @@ This RESTful API was built split into several tasks for Achievement 2 and 3 in [
 - log information is "processed by" Morgan middleware
 
 ### API documentation
-Work in Progress! https://documenter.getpostman.com/view/26201251/2s93JwP2hD
+Work in Progress! https://documenter.getpostman.com/view/26201251/2s93RRvDAq - will be done in Swagger as one of the next steps
 
 ### Languages, Libraries, Frameworks, Tools
 - HTML

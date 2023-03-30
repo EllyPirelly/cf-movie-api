@@ -1,49 +1,30 @@
-const express = require('express');
-const morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
-const bodyParser = require('body-parser');
-const uuid = require('uuid');
+const bodyParser = require('body-parser'),
+  fs = require('fs'),
+  path = require('path'),
+  express = require('express'),
+  mongoose = require('mongoose'),
+  morgan = require('morgan'),
+  cors = require('cors'),
+  uuid = require('uuid'),
+  Models = require('./models.js');
+
 const { check, validationResult } = require('express-validator');
-const mongoose = require('mongoose');
-const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
-// to connect to database
-mongoose.connect(process.env.CONNECTION_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-// to connect locally to database
-// mongoose.connect('mongodb://localhost:27017/moviepooldb', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
+const dotenv = require('dotenv');
+dotenv.config();
+const database = process.env.CONNECTION_URI;
 
 const app = express();
 
-// creates write stream, logs to log.txt
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'log.txt'),
-  {
-    flags: 'a'
-  }
-);
-
-// needed to comment out urlencoded AGAIN to have this work...
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('common', { stream: accessLogStream }));
-app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// AUTH
-const cors = require('cors');
-
-// default -  all origins have access
+// ALL origins have access (default)
 app.use(cors());
+
 // only CERTAIN origins have access
 // let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 // app use(cors({
@@ -62,6 +43,34 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
+// TODO: delete - create write stream, log to log.txt
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'log.txt'),
+  { flags: 'a' }
+);
+
+app.use(morgan('common', { stream: accessLogStream }));
+app.use(express.static('public'));
+
+// connect to MongoDB Atlas database via .env variable
+mongoose.connect(database, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+mongoose.set('strictQuery', false);
+
+// connect to MongoDB Atlas database - does not work, URI string error
+// mongoose.connect(process.env.CONNECTION_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
+
+// connect locally to database
+// mongoose.connect('mongodb://localhost:27017/moviepooldb', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
+
 // GENERAL
 
 app.get('/', (req, res) => {
@@ -75,23 +84,24 @@ app.get('/documentation', (req, res) => {
 // CREATE
 
 // post / add user
-// we expect JSON in this format
-// {
-//   id: Integer,
-//   userName: String,
-//   password: String,
-//   email: String,
-//   birthDate: Date
-// }
 app.post('/users',
   [
-    check('userName', 'Username is required.').isLength({ min: 5 }),
-    check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('password', 'Password is required.').not().isEmpty(),
-    check('email', 'Email does not appear to be valid.').isEmail(),
+    check('userName')
+      .isLength({ min: 5 })
+      .withMessage('Username must be at least 5 characters long.')
+      .isAlphanumeric()
+      .withMessage('Username contains non-alphanumeric characters - not allowed.')
+      .not().isEmpty()
+      .withMessage('Username must not be empty.'),
+    check('password')
+      .not().isEmpty()
+      .withMessage('Password is required.'),
+    check('email')
+      .isEmail()
+      .withMessage('Email does not appear to be valid.'),
   ], (req, res) => {
 
-    // checks validation object for errors
+    // check validation object for errors
     let errors = validationResult(req);
 
     // if any error the rest of the code will not execute
@@ -109,7 +119,7 @@ app.post('/users',
     }).then((user) => {
       if (user) {
         // if yes:
-        return res.status(400).send(req.body.userName + 'already exists');
+        return res.status(400).send(req.body.userName + ' already exists.');
       } else {
         // if no, create
         Users.create({
@@ -134,19 +144,13 @@ app.post('/users',
 app.post('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
+      { userName: req.params.userName },
       {
-        userName: req.params.userName
+        $push: { favoriteMovies: req.params.movieid }
       },
-      {
-        $push: {
-          favoriteMovies: req.params.movieid
-        }
-      },
-      {
-        new: true
-      }
+      { new: true }
     ).then((updatedUser) => {
-      res.json(updatedUser);
+      res.status(201).json(updatedUser);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -159,7 +163,7 @@ app.post('/users/:userName/movies/:movieid',
 app.get('/users',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find().then((users) => {
-      res.status(201).json(users);
+      res.status(200).json(users);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -170,7 +174,7 @@ app.get('/users',
 app.get('/movies',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find().then((movies) => {
-      res.status(201).json(movies);
+      res.status(200).json(movies);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -184,7 +188,7 @@ app.get('/users/:userName',
     Users.findOne({
       userName: req.params.userName
     }).then((user) => {
-      res.json(user);
+      res.status(200).json(user);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -197,7 +201,7 @@ app.get('/movies/:title',
     Movies.findOne({
       title: req.params.title
     }).then((movie) => {
-      res.json(movie);
+      res.status(200).json(movie);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -210,7 +214,7 @@ app.get('/movies/genres/:genreName',
     Movies.findOne({
       'genre.genreName': req.params.genreName
     }).then((movie) => {
-      res.json(movie.genre);
+      res.status(200).json(movie.genre);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -223,7 +227,7 @@ app.get('/movies/directors/:directorName',
     Movies.findOne({
       'director.directorName': req.params.directorName
     }).then((movie) => {
-      res.json(movie.director);
+      res.status(200).json(movie.director);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -233,19 +237,21 @@ app.get('/movies/directors/:directorName',
 // UPDATE
 
 // update user by userName
-// we expect JSON in this format
-// {
-//   userName: String, (required)
-//   password: String, (required)
-//   email: String, (required)
-//   birthDate: Date
-// }
 app.put('/users/:userName',
   [
-    check('userName', 'Username is required.').isLength({ min: 5 }),
-    check('userName', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('password', 'Password is required.').not().isEmpty(),
-    check('email', 'Email does not appear to be valid.').isEmail(),
+    check('userName')
+      .isLength({ min: 5 })
+      .withMessage('Username is required.')
+      .isAlphanumeric()
+      .withMessage('Username contains non-alphanumeric characters - not allowed.')
+      .not().isEmpty()
+      .withMessage('Username must not be empty.'),
+    check('password')
+      .not().isEmpty()
+      .withMessage('Password is required.'),
+    check('email')
+      .isEmail()
+      .withMessage('Email does not appear to be valid.'),
   ],
   passport.authenticate('jwt', { session: false }), (req, res) => {
 
@@ -262,9 +268,7 @@ app.put('/users/:userName',
     let hashedPassword = Users.hashPassword(req.body.password);
 
     Users.findOneAndUpdate(
-      {
-        userName: req.params.userName
-      },
+      { userName: req.params.userName },
       {
         $set: {
           userName: req.body.userName,
@@ -273,11 +277,9 @@ app.put('/users/:userName',
           birthDate: req.body.birthDate
         }
       },
-      {
-        new: true
-      }
+      { new: true }
     ).then((updatedUser) => {
-      res.json(updatedUser);
+      res.status(201).json(updatedUser);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -293,7 +295,7 @@ app.delete('/users/:userName',
       userName: req.params.userName
     }).then((user) => {
       if (!user) {
-        res.status(400).send(req.params.userName + ' was not found');
+        res.status(400).send(req.params.userName + ' was not found.');
       } else {
         res.status(200).send(req.params.userName + ' was deleted.');
       }
@@ -307,17 +309,13 @@ app.delete('/users/:userName',
 app.delete('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
-      {
-        userName: req.params.userName
-      },
+      { userName: req.params.userName },
       {
         $pull: {
           favoriteMovies: req.params.movieid
         }
       },
-      {
-        new: true
-      }
+      { new: true }
     ).then((updatedUser) => {
       res.json(updatedUser);
     }).catch((err) => {
@@ -328,24 +326,10 @@ app.delete('/users/:userName/movies/:movieid',
 
 // error handling middleware
 app.use((err, req, res, next) => {
-  console.log('error handling middleware called');
+  console.log('Error handling middleware called.');
   console.error(err.stack);
   res.status(500).send('There seems to be an error. ' + err);
 });
-
-// alternative error handling
-// app.use((req, res, next) => {
-//   const err = new Error('Not found.');
-//   console.log(err);
-//   err.status = 404;
-//   res.send('Route not found');
-//   next(err);
-// });
-
-// listen to port 8080
-// app.listen(8080, () => {
-//   console.log('Your app is listening on port 8080.');
-// });
 
 const port = process.env.PORT || 8080;
 
