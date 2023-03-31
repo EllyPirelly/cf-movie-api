@@ -44,6 +44,18 @@ paths:
         - Users
       summary: Delete a user
       description: Delete a user by user name. This can only be done by a logged in user.
+      parameters:
+        - name: userName
+          in: path
+          description: The name of a user to be deleted.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User has been deleted.
+        '400':
+          description: User was not found.
   /users/{userName}/movies/{movieid}:
     post:
       tags:
@@ -55,6 +67,24 @@ paths:
         - Users
       summary: Delete a movie
       description: Delete a movie off of a user's favorite movies list. This can only be done by a logged in user.
+      parameters:
+        - name: userName
+          in: path
+          description: The name of a user with a favorite movies list.
+          required: true
+          schema:
+            type: string
+        - name: movieid
+          in: path
+          description: The movie-id of a movie to be deleted off of a user's favorite movies list.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Movie has been deleted.
+        '500':
+          description: TODO - Error.
   /movies:
     get:
       tags:
