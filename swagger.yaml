@@ -23,11 +23,41 @@ paths:
         - Users
       summary: Create a user
       description: Create a user. This can be done by anyone.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object # array
+              properties:
+                userName:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+                birthDate:
+                  type: integer
+                  example: DD-MM-YYYY
+      responses:
+        '201':
+          description: Success
+        '400':
+          description: Failed
     get:
       tags:
         - Users
       summary: Get all users
       description: Get all users. This can only be done by a logged in user.
+      responses:
+        '200':
+          description: TODO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
   /users/{userName}:
     get:
       tags:
@@ -62,6 +92,20 @@ paths:
         - Users
       summary: Add a movie
       description: Add a movie to user's favorite movies list. This can only be done by a logged in user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object # array
+              properties:
+                userName:
+                  type: string
+      responses:
+        '201':
+          description: Success
+        '500':
+          description: Failed
     delete:
       tags:
         - Users
@@ -91,6 +135,15 @@ paths:
         - Movies
       summary: Get all movies
       description: Get all movies. This can only be done by a logged in user.
+      responses:
+        '200':
+          description: TODO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
   /movies/{title}:
     get:
       tags:
