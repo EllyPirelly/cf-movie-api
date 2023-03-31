@@ -51,13 +51,33 @@ paths:
       description: Get all users. This can only be done by a logged in user.
       responses:
         '200':
-          description: TODO
+          description: Success
+        '500':
+          description: Failed
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: object # array
+                properties:
+                  _id:
+                    type: integer
+                    example: 0
+                  userName:
+                    type: string
+                  password:
+                    type: string
+                  email:
+                    type: string
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YYYY
+                  favoriteMovies:
+                    type: array
+                    xml:
+                      wrapped: true
+                      properties:
+                        movieid: integer
+                        example: 1042034
   /users/{userName}:
     get:
       tags:
@@ -137,13 +157,30 @@ paths:
       description: Get all movies. This can only be done by a logged in user.
       responses:
         '200':
-          description: TODO
+          description: Success
+        '500':
+          description: Failed
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: object # array
+                properties:
+                  genre:
+                    genreName:
+                      type: string
+                    description:
+                      type: string
+                  description:
+                    directorName:
+                      type: string
+                    bio:
+                      type: string
+                    birthDate:
+                      type: integer
+                      example: DD-MM-YYYY
+                    deathDate:
+                      type: integer
+                      example: DD-MM-YYYY
   /movies/{title}:
     get:
       tags:
