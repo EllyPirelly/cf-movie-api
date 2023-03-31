@@ -5,31 +5,77 @@ info:
   version: 1.0.0
 servers:
   - url: https://movie-pool.onrender.com
-    description: TODO Optional server description
+tags:
+  - name: Users
+    description: Everything about Users
+    externalDocs:
+      description: Find out more
+      url: https://movie-pool.onrender.com
+  - name: Movies
+    description: Everything about Movies
+    externalDocs:
+      description: Find out more
+      url: https://movie-pool.onrender.com
 paths:
   /users:
+    post:
+      tags:
+        - Users
+      summary: Create a user
+      description: Create a user. This can be done by anyone.
     get:
-      summary: Returns a list of users.
-      description: TODO Optional extended description in CommonMark or HTML.
-      responses:
-        '200':    # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
+      tags:
+        - Users
+      summary: Get all users
+      description: Get all users. This can only be done by a logged in user.
+  /users/{userName}:
+    get:
+      tags:
+        - Users
+      summary: Get a user by user name
+      description: Get a user by user name. This can only be done by a logged in user.
+    put:
+      tags:
+        - Users
+      summary: Update user by user name
+      description: Update user by user name. This can only be done by a logged in user.
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      description: Delete a user by user name. This can only be done by a logged in user.
+  /users/{userName}/movies/{movieid}:
+    post:
+      tags:
+        - Users
+      summary: Add a movie
+      description: Add a movie to user's favorite movies list. This can only be done by a logged in user.
+    delete:
+      tags:
+        - Users
+      summary: Delete a movie
+      description: Delete a movie off of a user's favorite movies list. This can only be done by a logged in user.
   /movies:
     get:
-      summary: Returns a list of movies.
-      description: TODO Optional extended description in CommonMark or HTML.
-      responses:
-        '200':    # status code
-          description: A JSON array of movies
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
+      tags:
+        - Movies
+      summary: Get all movies
+      description: Get all movies. This can only be done by a logged in user.
+  /movies/{title}:
+    get:
+      tags:
+        - Movies
+      summary: Get a specific movie
+      description: Get a specific movie by title. This can only be done by a logged in user.
+  /movies/genres/{genreName}:
+    get:
+      tags:
+        - Movies
+      summary: Get a specific movie genre
+      description: Get a specific movie genre by genre name. This can only be done by a logged in user.
+  /movies/directors/{directorName}:
+    get:
+      tags:
+        - Movies
+      summary: Get a specific director
+      description: Get a specific director by director name. This can only be done by a logged in user.
