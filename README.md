@@ -1,11 +1,10 @@
 # MoviePool API
 
 ### What is this about?
-RESTful API for movie lovers that want to be able to access information about different movies, genres, directors... <br>
-It's the "M", "E" and "N" from the MERN stack (MongoDB, Express.js, React, Node.js). <br>
-[Find the "R" here.](https://github.com/EllyPirelly/cf-movie-client)
+RESTful API for movie lovers that want to be able to access information about different movies. Users are able to sign up, update their personal information and create a list of their favorite movies. It’s the M, E and N from the MERN stack. <br>
+[Find the R here.](https://github.com/EllyPirelly/cf-movie-client)
 
-This RESTful API was built split into several tasks for Achievement 2 and 3 in [Career Foundry's Full-Stack Web Development Program](https://careerfoundry.com/en/courses/become-a-web-developer/).
+This RESTful API has been built split into several tasks for Achievement 2 and 3 in [Career Foundry's Full-Stack Web Development Program](https://careerfoundry.com/en/courses/become-a-web-developer/).
 
 ### Project Requirements
 - MERN stack must be used
