@@ -1,7 +1,7 @@
 # MoviePool API
 
 ### What is this about?
-A RESTful API for movie lovers that want to be able to access information about different movies. Users are able to sign up, update their personal information and create a list of their favorite movies. It’s the M, E and N from the MERN stack and connects to a database that is hosted on MongoDB Atlas.
+A RESTful API for movie lovers that want to be able to access information about different movies. It’s the M, E and N from the MERN stack and connects to a database that is hosted on MongoDB Atlas.
 
 [Find the R here.](https://github.com/EllyPirelly/cf-movie-client)
 
@@ -9,6 +9,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 
 ### TODO - Swagger API documentation
 - TODO at the moment swagger's still a feature branch
+![Screenshot of the Swagger API Doc](public/img/screenshot-swagger.png)
 - this is OLD and will be deleted as soon as swagger doc is done! https://documenter.getpostman.com/view/26201251/2s93RRvDAq
 
 ### Technical requirements
@@ -30,7 +31,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
   - must be build using MongoDB (MongoDB Community Server, Mongo Shell, MongoDB Database Tools) with "code first" approach: first design endpoints, then design database
   - must be hostet on [MongoDB Atlas](https://www.mongodb.com/atlas/database)
 
-### Feature requirements / Accessible information
+### Feature requirements / Accessible information, defining the endpoints
 `users`
 - new users
   - are able to sign up
