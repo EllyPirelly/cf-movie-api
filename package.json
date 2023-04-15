@@ -1,7 +1,7 @@
 {
-  "name": "movie-api",
+  "name": "moviepool-api",
   "version": "1.0.0",
-  "description": "movie-api - todo",
+  "description": "RESTful API for movie lovers that want to be able to access information about different movies",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
