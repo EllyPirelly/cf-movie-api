@@ -12,6 +12,10 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 ![Screenshot of the Swagger API Doc](public/img/screenshot-swagger.png)
 - this is OLD and will be deleted as soon as swagger doc is done! https://documenter.getpostman.com/view/26201251/2s93RRvDAq
 
+### How to throw Swagger documentation on localhost
+- start server `npm run start`
+- swagger doc will be on `http://localhost:8080/api-docs/`
+
 ### Technical requirements
 - MERN stack must be used (MongoDB, Express, Node.js)
 - API

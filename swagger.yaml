@@ -1,49 +1,66 @@
 openapi: 3.0.0
 info:
-  title: Movie API
-  description: RESTful API for movie lovers that want to be able to access information about different movies, genres, directors...
+  title: MoviePool API
+  description: RESTful API for movie lovers that want to be able to access information about different movies
   version: 1.0.0
-servers:
-  - url: https://movie-pool.onrender.com
 tags:
   - name: Users
     description: Everything about Users
-    externalDocs:
-      description: Find out more
-      url: https://movie-pool.onrender.com
   - name: Movies
-    description: Everything about Movies
-    externalDocs:
-      description: Find out more
-      url: https://movie-pool.onrender.com
 paths:
   /users:
     post:
       tags:
         - Users
       summary: Create a user
-      description: Create a user. This can be done by anyone.
+      description: This can be done by anyone.
       requestBody:
+        description: Created user object
         required: true
         content:
           application/json:
             schema:
-              type: object # array
+              type: object
               properties:
                 userName:
                   type: string
+                  example: Jane Doe
                 password:
                   type: string
+                  example: testpassword1234
                 email:
                   type: string
+                  example: janedoe@testmail.com
                 birthDate:
                   type: integer
                   example: DD-MM-YYYY
       responses:
-        '201':
-          description: Success
-        '400':
-          description: Failed
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    tpye: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: testpassword1234
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YY
+                  favoriteMovies:
+                    type: array
+                      - ObjectId('000')
+                      - ObjectId('111')
     get:
       tags:
         - Users
