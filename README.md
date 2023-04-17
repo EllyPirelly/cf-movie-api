@@ -9,7 +9,6 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 
 ### TODO - Swagger API documentation
 - TODO at the moment swagger's still a feature branch
-![Screenshot of the Swagger API Doc](public/img/screenshot-swagger.png)
 - this is OLD and will be deleted as soon as swagger doc is done! https://documenter.getpostman.com/view/26201251/2s93RRvDAq
 
 ### Technical requirements
