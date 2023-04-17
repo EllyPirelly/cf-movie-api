@@ -22,23 +22,23 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ALL origins have access (default) - this way is  not recommended
-// therefore trying it with only certain origins
-// app.use(cors());
+// ALL origins have access (default)
+// this way is not recommended but only allowing certain ones does not work atm
+app.use(cors());
 
-// only CERTAIN origins have access
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://movie-pool-app.netlify.app/'];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      // if a specific origin isn't found on the list of allwed origins
-      let message = 'The CORS policy for this app does NOT allow access from origin ' + origin;
-      return callback(new Error(message), false);
-    }
-    return callback(null, true);
-  }
-}));
+// only CERTAIN origins have access - does not work
+// let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://movie-pool-app.netlify.app/'];
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     if (!origin) return callback(null, true);
+//     if (allowedOrigins.indexOf(origin) === -1) {
+//       // if a specific origin isn't found on the list of allwed origins
+//       let message = 'The CORS policy for this app does NOT allow access from origin ' + origin;
+//       return callback(new Error(message), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
 
 let auth = require('./auth')(app);
 const passport = require('passport');
