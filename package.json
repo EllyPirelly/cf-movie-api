@@ -1,5 +1,5 @@
 {
-  "name": "moviepool-api",
+  "name": "movie-api",
   "version": "1.0.0",
   "description": "RESTful API for movie lovers that want to be able to access information about different movies",
   "main": "index.js",
