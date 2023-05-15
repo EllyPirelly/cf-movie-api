@@ -22,29 +22,30 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ALL origins have access (default)
-// this way is not recommended but only allowing certain ones does not work atm
-// app.use(cors());
+// aLL origins have access (default)
+// this way is not recommended, only allowing certain ones does not work atm
+// TODO: fix this when time
+app.use(cors());
 
 // only CERTAIN origins have access - does not work
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://movie-pool-app.netlify.app'];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      // if a specific origin isn't found on the list of allwed origins
-      let message = 'The CORS policy for this app does NOT allow access from origin ' + origin;
-      return callback(new Error(message), false);
-    }
-    return callback(null, true);
-  }
-}));
+// let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://movie-pool-app.netlify.app'];
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     if (!origin) return callback(null, true);
+//     if (allowedOrigins.indexOf(origin) === -1) {
+//       // if a specific origin isn't found on the list of allwed origins
+//       let message = 'The CORS policy for this app does NOT allow access from origin ' + origin;
+//       return callback(new Error(message), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
 
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-// TODO: delete - create write stream, log to log.txt
+// TODO: consider to delete - create write stream, log to log.txt
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'log.txt'),
   { flags: 'a' }
