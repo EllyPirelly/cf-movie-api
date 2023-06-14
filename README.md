@@ -31,6 +31,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
   - must contain two collections: `users` `movies` with various documents
   - must be build using MongoDB (MongoDB Community Server, Mongo Shell, MongoDB Database Tools) with "code first" approach: first design endpoints, then design database
   - must be hostet on [MongoDB Atlas](https://www.mongodb.com/atlas/database)
+  - must use [JSDoc](https://jsdoc.app/) for technical documentation
 
 ### Feature requirements / Accessible information, defining the endpoints
 `users`
