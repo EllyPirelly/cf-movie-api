@@ -16,7 +16,13 @@ let generateJWToken = (user) => {
   });
 };
 
-// POST - login
+/**
+* CREATE: log in
+* endpoint '/login'
+* @param {string} userName
+* @param {string} password
+* @returns an object holding user data
+*/
 module.exports = (router) => {
   router.use(passport.initialize());
   router.post('/login', (req, res) => {
