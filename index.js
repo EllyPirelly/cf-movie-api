@@ -24,17 +24,15 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yaml');
 const file = fs.readFileSync('./swagger.yaml', 'utf8');
 const swaggerDocument = YAML.parse(file)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// aLL origins have access (default)
-// this way is not recommended, only allowing certain ones does not work atm
-// TODO: fix this when time
+// ALL origins have access (default)
 app.use(cors());
 
-// only CERTAIN origins have access - does not work
+// only CERTAIN origins have access - does not work atm
 // let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://movie-pool-app.netlify.app'];
 // app.use(cors({
 //   origin: (origin, callback) => {
@@ -52,7 +50,7 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-// TODO: consider to delete - create write stream, log to log.txt
+// has been part of the exercises and creates write stream, logs to log.txt
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'log.txt'),
   { flags: 'a' }
@@ -61,18 +59,12 @@ const accessLogStream = fs.createWriteStream(
 app.use(morgan('common', { stream: accessLogStream }));
 app.use(express.static('public'));
 
-// connect to MongoDB Atlas database via .env variable
+// connects to MongoDB Atlas database via .env variable
 mongoose.connect(database, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 mongoose.set('strictQuery', false);
-
-// connect to MongoDB Atlas database - does not work, URI string error
-// mongoose.connect(process.env.CONNECTION_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
 
 // connect locally to database
 // mongoose.connect('mongodb://localhost:27017/moviepooldb', {
@@ -83,7 +75,7 @@ mongoose.set('strictQuery', false);
 // GENERAL
 
 app.get('/', (req, res) => {
-  res.status(200).send('Check this API out.');
+  res.status(200).send('Welcome to the MoviePool API!');
 });
 
 app.get('/documentation', (req, res) => {
@@ -155,7 +147,9 @@ app.post('/users/:userName/movies/:movieid',
     Users.findOneAndUpdate(
       { userName: req.params.userName },
       {
-        $push: { favoriteMovies: req.params.movieid }
+        $push: {
+          favoriteMovies: req.params.movieid
+        }
       },
       { new: true }
     ).then((updatedUser) => {
@@ -326,7 +320,7 @@ app.delete('/users/:userName/movies/:movieid',
       },
       { new: true }
     ).then((updatedUser) => {
-      res.json(updatedUser);
+      res.status(201).json(updatedUser);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);

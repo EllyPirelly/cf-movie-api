@@ -4,18 +4,38 @@ info:
   description: RESTful API for movie lovers that want to be able to access information about different movies
   version: 1.0.0
 tags:
+  - name: Homepage
+    description: Homepage
+  - name: Sign up / Log in
+    description: Everything about sign up / log in
   - name: Users
     description: Everything about Users
   - name: Movies
+    description: Everything about Movies
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 paths:
-  /users:
+  /:
+    get:
+      tags:
+        - Homepage
+      summary: Get Homepage
+      description: GET request to get the homepage.
+      responses:
+        '200':
+          description: Successful fetch of resource
+  /signup:
     post:
       tags:
-        - Users
-      summary: Create a user
-      description: This can be done by anyone.
+        - Sign up / Log in
+      summary: Allow a user to sign up
+      description: POST request to sign up as a new user. This can be done by anyone.
       requestBody:
-        description: Created user object
+        description: User data that needs to be send to sign up as a new user.
         required: true
         content:
           application/json:
@@ -35,86 +55,225 @@ paths:
                   type: integer
                   example: DD-MM-YYYY
       responses:
-        default:
-          description: successful operation
+        '201':
+          description: User successfully created
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   _id:
-                    tpye: string
+                    type: string
                     example: ObjectId('12345abcde67fg890h1i2jk3')
                   userName:
                     type: string
                     example: Jane Doe
                   password:
                     type: string
-                    example: testpassword1234
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
                   email:
                     type: string
                     example: janedoe@testmail.com
                   birthDate:
                     type: integer
-                    example: DD-MM-YY
+                    example: DD-MM-YYYY
                   favoriteMovies:
                     type: array
-                      - ObjectId('000')
-                      - ObjectId('111')
-    get:
+                    items:
+                      properties:
+        '400':
+          description: User already exists
+  /login:
+    post:
       tags:
-        - Users
-      summary: Get all users
-      description: Get all users. This can only be done by a logged in user.
+        - Sign up / Log in
+      summary: Allow a user to log in
+      description: POST request to log in as an already existing user. This can only be done by a registered user.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: User data that needs to be send to log in as a registered user.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: Jane Doe
+                password:
+                  type: string
+                  example: testpassword1234
       responses:
         '200':
-          description: Success
-        '500':
-          description: Failed
+          description: Successful fetch of resource
           content:
             application/json:
               schema:
-                type: object # array
+                type: object
                 properties:
                   _id:
-                    type: integer
-                    example: 0
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
                   userName:
                     type: string
+                    example: Jane Doe
                   password:
                     type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
                   email:
                     type: string
+                    example: janedoe@testmail.com
                   birthDate:
                     type: integer
                     example: DD-MM-YYYY
                   favoriteMovies:
                     type: array
-                    xml:
-                      wrapped: true
+                    items:
                       properties:
-                        movieid: integer
-                        example: 1042034
+        '400':
+          description: Bad request due to invalid input
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      description: GET request to get all users. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YYYY
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+                        0:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+                        1:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+        '500':
+          description: Internal Server Error
   /users/{userName}:
     get:
       tags:
         - Users
       summary: Get a user by user name
-      description: Get a user by user name. This can only be done by a logged in user.
-    put:
-      tags:
-        - Users
-      summary: Update user by user name
-      description: Update user by user name. This can only be done by a logged in user.
-    delete:
-      tags:
-        - Users
-      summary: Delete a user
-      description: Delete a user by user name. This can only be done by a logged in user.
+      description: GET request to get a user by user name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
       parameters:
         - name: userName
           in: path
-          description: The name of a user to be deleted.
+          description: The user name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YYYY
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+                        0:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+                        1:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Users
+      summary: Update user data by user name
+      description: PUT request to update user data by user name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The user name
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: User successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Users
+      summary: Delete a user by user name
+      description: DELETE request to delete a user by user name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The user name
           required: true
           schema:
             type: string
@@ -123,31 +282,74 @@ paths:
           description: User has been deleted.
         '400':
           description: User was not found.
+        '500':
+          description: Internal Server Error
   /users/{userName}/movies/{movieid}:
     post:
       tags:
         - Users
-      summary: Add a movie
-      description: Add a movie to user's favorite movies list. This can only be done by a logged in user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object # array
-              properties:
-                userName:
-                  type: string
+      summary: Add a movie to user's favorite movies list by movie id
+      description: POST request to add a movie to user's favorite movies list. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The name of a user with a favorite movies list
+          required: true
+          schema:
+            type: string
+        - name: movieid
+          in: path
+          description: The movie id of the movie that has been added to a user's favorite movies list
+          required: true
+          schema:
+            type: string
       responses:
         '201':
-          description: Success
+          description: Movie added successfully, User object updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YYYY
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+                        0:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+                        1:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+                        2:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
         '500':
-          description: Failed
+          description: Internal Server Error
     delete:
       tags:
         - Users
-      summary: Delete a movie
-      description: Delete a movie off of a user's favorite movies list. This can only be done by a logged in user.
+      summary: Delete a movie off of user's favorite movies list by movie id
+      description: DELETE request to delete a movie off of a user's favorite movies list. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
       parameters:
         - name: userName
           in: path
@@ -157,62 +359,216 @@ paths:
             type: string
         - name: movieid
           in: path
-          description: The movie-id of a movie to be deleted off of a user's favorite movies list.
+          description: Movie id of the movie that has been deleted off of a user's favorite movies list
           required: true
           schema:
             type: string
       responses:
-        '200':
-          description: Movie has been deleted.
+        '201':
+          description: Movie deleted successfully, User object updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YYYY
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
         '500':
-          description: TODO - Error.
+          description: Internal Server Error
   /movies:
     get:
       tags:
         - Movies
       summary: Get all movies
-      description: Get all movies. This can only be done by a logged in user.
+      description: GET request to get all movies. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: Success
-        '500':
-          description: Failed
+          description: Successful fetch of resource
           content:
             application/json:
               schema:
-                type: object # array
+                type: object
                 properties:
-                  genre:
-                    genreName:
-                      type: string
-                    description:
-                      type: string
+                  _id:
+                    type: string
+                    example: ObjectId('640f2e4353ffdd1f54db45da')
+                  title:
+                    type: string
+                    example: Terminator
                   description:
-                    directorName:
-                      type: string
-                    bio:
-                      type: string
-                    birthDate:
-                      type: integer
-                      example: DD-MM-YYYY
-                    deathDate:
-                      type: integer
-                      example: DD-MM-YYYY
+                    type: string
+                    example: lorem ipsum
+                  genre:
+                    type: object
+                    properties:
+                      genreName:
+                        type: string
+                        example: lorem ipsum
+                      description:
+                        type: string
+                        example: lorem ipsum
+                  director:
+                    type: object
+                    properties:
+                      directorName:
+                        type: string
+                        example: James Cameron
+                      bio:
+                        type: string
+                        example: lorem ipsum
+                      birthDate:
+                        type: integer
+                        example: DD-MM-YYYY
+                  imagePath:
+                    type: string
+                    example: https://xl.movieposterdb.com/22_11/1991/301928/xl_the-terminator-movie-poster_c32bbde4.jpg
+                  featured:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal Server Error
   /movies/{title}:
     get:
       tags:
         - Movies
-      summary: Get a specific movie
-      description: Get a specific movie by title. This can only be done by a logged in user.
+      summary: Get a specific movie by title
+      description: GET request to get a specific movie by title. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: title
+          in: path
+          description: The movie title
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('640f2e4353ffdd1f54db45da')
+                  title:
+                    type: string
+                    example: Terminator
+                  description:
+                    type: string
+                    example: lorem ipsum
+                  genre:
+                    type: object
+                    properties:
+                      genreName:
+                        type: string
+                        example: lorem ipsum
+                      description:
+                        type: string
+                        example: lorem ipsum
+                  director:
+                    type: object
+                    properties:
+                      directorName:
+                        type: string
+                        example: James Cameron
+                      bio:
+                        type: string
+                        example: lorem ipsum
+                      birthDate:
+                        type: integer
+                        example: DD-MM-YYYY
+                  imagePath:
+                    type: string
+                    example: https://xl.movieposterdb.com/22_11/1991/301928/xl_the-terminator-movie-poster_c32bbde4.jpg
+                  fetured:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal Server Error
   /movies/genres/{genreName}:
     get:
       tags:
         - Movies
-      summary: Get a specific movie genre
-      description: Get a specific movie genre by genre name. This can only be done by a logged in user.
+      summary: Get a specific movie genre by movie genre name
+      description: GET request to get a specific movie genre by genre name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: genreName
+          in: path
+          description: The genre name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  genreName:
+                    type: string
+                    example: lorem ipsum
+                  description:
+                    type: string
+                    example: lorem ipsum
+        '500':
+          description: Internal Server Error
   /movies/directors/{directorName}:
     get:
       tags:
         - Movies
-      summary: Get a specific director
+      summary: Get a specific director by director name
       description: Get a specific director by director name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: directorName
+          in: path
+          description: The director name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  directorName:
+                    type: string
+                    example: James Cameron
+                  bio:
+                    type: string
+                    example: lorem ipsum
+                  birthDate:
+                    type: integer
+                    example: DD-MM-YYYY
+        '500':
+          description: Internal Server Error

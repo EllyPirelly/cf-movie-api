@@ -7,42 +7,7 @@ let Users = Models.User,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
 
-// TODO: delete - bugfix: tying the old way of password.use
-// passport.use(new LocalStrategy(
-//   {
-//     usernameField: 'userName',
-//     passwordField: 'password',
-//   },
-//   (username, password, callback) => {
-//     console.log(username + ' ' + password);
-//     Users.findOne({ userName: username }, (error, user) => {
-//       if (error) {
-//         console.log(error);
-//         return callback(error);
-//       }
-
-//       if (!user) {
-//         console.log('Incorrect username.');
-//         return callback(null, false, {
-//           message: 'Incorrect username.',
-//         });
-//       }
-
-//       if (!user.validatePassword(password)) {
-//         console.log('Incorrect password.');
-//         return callback(null, false, {
-//           message: 'Incorrect password.',
-//         });
-//       }
-
-//       console.log('finished');
-//       return callback(null, user);
-//     });
-//   }
-// ));
-
 // basic HTTP authentication for login
-// promises
 passport.use(
   new LocalStrategy(
     {
@@ -50,29 +15,30 @@ passport.use(
       passwordField: 'password',
     },
     (username, password, callback) => {
-      console.log(username + ' ' + password);
+      // console.log(username + ' ' + password);
       Users.findOne({ userName: username })
         .then((user) => {
           if (!user) {
-            console.log('Incorrect username.');
+            // console.log('Incorrect username.');
             return callback(null, false, {
               message: 'Incorrect username.'
             });
           }
           if (!user.validatePassword(password)) {
-            console.log('Incorrect password');
+            // console.log('Incorrect password');
             return callback(null, false, {
               message: 'Incorrect password.'
             });
           }
-          console.log('finished');
+          // console.log('finished');
           return callback(null, user);
         }).catch((error) => {
-          console.log(error);
+          // console.log(error);
           return callback(error, false);
         });
     }
-  ));
+  )
+);
 
 // JWT authentication
 passport.use(new JWTStrategy(
