@@ -45,7 +45,6 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
     - userName
     - password
   - are able to logout
-- registered users - when logged in
   - are able to update their personal information
     - userName
     - password
@@ -53,8 +52,8 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
     - birthDate
     - favoriteMovies
   - have access to information about movies
-  - are able to add a movie to their list of favoriteMovies
-  - are able to delete a movie off of their list of favoriteMovies
+  - are able to add a movie to their list of favorite movies
+  - are able to delete a movie off of their list of favorite movies
   - are able to delete their account
 
 `movies`
@@ -122,7 +121,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 - beware of the `.env` file that is not committed; when cloning, you won't have the `CONNECTION_URI` variable and you won't have the assigned value (the MongoDB URI) so the project won't work
 
 #### How to start the server with Nodemon
-- `cd` into correct directory and start server with `npm run dev`
+- `cd` into correct directory and start the server with `npm run dev`
 - this will start the project on `http://localhost:8080/`
 - stop the server with `ctrl c`
 
@@ -132,7 +131,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 - stop the server with `ctl c`
 
 #### How to throw Swagger documentation on localhost
-- `cd` into correct directory and start server with `npm run start`
+- `cd` into correct directory and start the server with `npm run start`
 - swagger doc will be on `http://localhost:8080/documentation`
 - stop the server with `ctl c`
 
@@ -149,6 +148,15 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 ```
 - ONLY WORKS IN FEATURE BRANCH!
 - (if installed globally, you could run `jsdoc yourJavaScriptFile.js`)
+
+### Swagger Sources
+- https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
+- https://www.npmjs.com/package/swagger-ui-express
+
+### Postman Sources
+- API documentation with Postman - this one is a bit older. https://www.youtube.com/watch?v=Ayo_KdLLcTA
+- API Documentation | The Exploratory - this one is a bit newer https://www.youtube.com/watch?v=XNVo9WkCoak
+- old (!) documentation / WIP https://documenter.getpostman.com/view/26201251/2s93RRvDAq
 
 ### JSDoc Sources
 - https://www.npmjs.com/package/jsdoc
