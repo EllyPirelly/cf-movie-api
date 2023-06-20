@@ -150,8 +150,14 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 - (if installed globally, you could run `jsdoc yourJavaScriptFile.js`)
 
 ### Swagger Sources
+- https://github.com/OAI/OpenAPI-Specification/releases
+- https://editor.swagger.io/
+- https://petstore.swagger.io/?_ga=2.223173272.2032246104.1680158771-1614811837.1678349012#/user/deleteUser
+- https://swagger.io/docs/specification/basic-structure/
+- https://swagger.io/tools/swagger-ui/
 - https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
 - https://www.npmjs.com/package/swagger-ui-express
+- https://www.npmjs.com/package/yaml
 
 ### Postman Sources
 - API documentation with Postman - this one is a bit older. https://www.youtube.com/watch?v=Ayo_KdLLcTA
