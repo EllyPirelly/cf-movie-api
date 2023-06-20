@@ -1,0 +1,576 @@
+openapi: 3.0.0
+info:
+  title: MoviePool API
+  description: RESTful API for movie lovers that want to be able to access information about different movies
+  version: 1.0.0
+tags:
+  - name: Homepage
+    description: Homepage
+  - name: Sign up / Log in
+    description: Everything about sign up / log in
+  - name: Users
+    description: Everything about Users
+  - name: Movies
+    description: Everything about Movies
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /:
+    get:
+      tags:
+        - Homepage
+      summary: Get Homepage
+      description: GET request to get the homepage.
+      responses:
+        '200':
+          description: Successful fetch of resource
+  /signup:
+    post:
+      tags:
+        - Sign up / Log in
+      summary: Allow a user to sign up
+      description: POST request to sign up as a new user. This can be done by anyone.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: User data that needs to be send to sign up as a new user.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: Jane Doe
+                password:
+                  type: string
+                  example: testpassword1234
+                email:
+                  type: string
+                  example: janedoe@testmail.com
+                birthDate:
+                  type: integer
+                  example: YYYY-MM-DD
+      responses:
+        '201':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 12345abcde67fg890h1i2jk3
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: YYYY-MM-DD
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+        '400':
+          description: User already exists
+  /login:
+    post:
+      tags:
+        - Sign up / Log in
+      summary: Allow a user to log in
+      description: POST request to log in as an already existing user. This can only be done by a registered user. JSON Web Token is created when logging in with user name and password.
+      security:
+        - basicAuth: []
+      requestBody:
+        description: User data that needs to be send to log in as a registered user.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  example: Jane Doe
+                password:
+                  type: string
+                  example: testpassword1234
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      userName:
+                        type: string
+                        example: Jane Doe
+                      email:
+                        type: string
+                        example: janedoe@testmail.com
+                      favoriteMovies:
+                        type: array
+                        items:
+                          properties:
+                  token:
+                    type: string
+                    example: a long string of characters, representing passport json web token with HS256 encoding
+        '400':
+          description: Bad request due to invalid input
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      description: GET request to get all users. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 12345abcde67fg890h1i2jk3
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: YYYY-MM-DD
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+                        0:
+                          type: string
+                          example: 12345abcde67fg890h1i2jk3
+                        1:
+                          type: string
+                          example: 12345abcde67fg890h1i2jk3
+        '500':
+          description: Internal Server Error
+  /users/{userName}:
+    get:
+      tags:
+        - Users
+      summary: Get a user by user name
+      description: GET request to get a user by user name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The user name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 12345abcde67fg890h1i2jk3
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: YYYY-MM-DD
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+                        0:
+                          type: string
+                          example: 12345abcde67fg890h1i2jk3
+                        1:
+                          type: string
+                          example: 12345abcde67fg890h1i2jk3
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Users
+      summary: Update user data by user name
+      description: PUT request to update user data by user name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The user name
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: User successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 12345abcde67fg890h1i2jk3
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Users
+      summary: Delete a user by user name
+      description: DELETE request to delete a user by user name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The user name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User has been deleted.
+        '400':
+          description: User was not found.
+        '500':
+          description: Internal Server Error
+  /users/{userName}/movies/{movieid}:
+    post:
+      tags:
+        - Users
+      summary: Add a movie to user's favorite movies list by movie id
+      description: POST request to add a movie to user's favorite movies list. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The name of a user with a favorite movies list
+          required: true
+          schema:
+            type: string
+        - name: movieid
+          in: path
+          description: The movie id of the movie that has been added to a user's favorite movies list
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Movie added successfully, User object updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: ObjectId('12345abcde67fg890h1i2jk3')
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: YYYY-MM-DD
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+                        0:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+                        1:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+                        2:
+                          type: string
+                          example: ObjectId('12345abcde67fg890h1i2jk3')
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Users
+      summary: Delete a movie off of user's favorite movies list by movie id
+      description: DELETE request to delete a movie off of a user's favorite movies list. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userName
+          in: path
+          description: The name of a user with a favorite movies list.
+          required: true
+          schema:
+            type: string
+        - name: movieid
+          in: path
+          description: Movie id of the movie that has been deleted off of a user's favorite movies list
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Movie deleted successfully, User object updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 12345abcde67fg890h1i2jk3
+                  userName:
+                    type: string
+                    example: Jane Doe
+                  password:
+                    type: string
+                    example: $3c$10$OJL7mdTq69czPIYlV/c09OzUR.kV5tBCTUmxCxy/ysxg1TSS.bIcp
+                  email:
+                    type: string
+                    example: janedoe@testmail.com
+                  birthDate:
+                    type: integer
+                    example: YYYY-MM-DD
+                  favoriteMovies:
+                    type: array
+                    items:
+                      properties:
+        '500':
+          description: Internal Server Error
+  /movies:
+    get:
+      tags:
+        - Movies
+      summary: Get all movies
+      description: GET request to get all movies. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 640f2e4353ffdd1f54db45da
+                  title:
+                    type: string
+                    example: Terminator
+                  description:
+                    type: string
+                    example: A human soldier is sent from 2029 to 1984 to stop an almost indestructible cyborg killing machine, sent from the same year, which has been programmed to execute a young woman whose unborn son is the key to humanity's future salvation.
+                  genre:
+                    type: object
+                    properties:
+                      genreName:
+                        type: string
+                        example: Sci-Fi
+                      description:
+                        type: string
+                        example: Science fiction (sometimes shortened to sf or sci-fi) is a genre of speculative fiction, which typically deals with imaginative and futuristic concepts such as advanced science and technology, space exploration, time travel, parallel universes, and extraterrestrial life.
+                  director:
+                    type: object
+                    properties:
+                      directorName:
+                        type: string
+                        example: James Cameron
+                      bio:
+                        type: string
+                        example: James Francis Cameron is a Canadian filmmaker. A major figure in the post-New Hollywood era, he is considered one of the industry's most innovative filmmakers, regularly pushing the boundaries of cinematic capability with his use of novel technologies. He first gained recognition for writing and directing The Terminator (1984) and found further success with Aliens (1986), The Abyss (1989), Terminator 2, Judgment Day (1991), and the action comedy True Lies (1994). He wrote and directed Titanic (1997), Avatar (2009) and its sequels, with Titanic earning him Academy Awards for Best Picture, Best Director and Best Film Editing. A recipient of various other industry accolades, two of his films have been selected for preservation in the National Film Registry by the Library of Congress.
+                      birthDate:
+                        type: integer
+                        example: YYYY-MM-DD
+                  imagePath:
+                    type: string
+                    example: https://xl.movieposterdb.com/22_11/1991/301928/xl_the-terminator-movie-poster_c32bbde4.jpg
+                  featured:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal Server Error
+  /movies/{title}:
+    get:
+      tags:
+        - Movies
+      summary: Get a specific movie by title
+      description: GET request to get a specific movie by title. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: title
+          in: path
+          description: The movie title
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 640f2e4353ffdd1f54db45da
+                  title:
+                    type: string
+                    example: Terminator
+                  description:
+                    type: string
+                    example: A human soldier is sent from 2029 to 1984 to stop an almost indestructible cyborg killing machine, sent from the same year, which has been programmed to execute a young woman whose unborn son is the key to humanity's future salvation.
+                  genre:
+                    type: object
+                    properties:
+                      genreName:
+                        type: string
+                        example: Sci-Fi
+                      description:
+                        type: string
+                        example: Science fiction (sometimes shortened to sf or sci-fi) is a genre of speculative fiction, which typically deals with imaginative and futuristic concepts such as advanced science and technology, space exploration, time travel, parallel universes, and extraterrestrial life.
+                  director:
+                    type: object
+                    properties:
+                      directorName:
+                        type: string
+                        example: James Cameron
+                      bio:
+                        type: string
+                        example: James Francis Cameron is a Canadian filmmaker. A major figure in the post-New Hollywood era, he is considered one of the industry's most innovative filmmakers, regularly pushing the boundaries of cinematic capability with his use of novel technologies. He first gained recognition for writing and directing The Terminator (1984) and found further success with Aliens (1986), The Abyss (1989), Terminator 2, Judgment Day (1991), and the action comedy True Lies (1994). He wrote and directed Titanic (1997), Avatar (2009) and its sequels, with Titanic earning him Academy Awards for Best Picture, Best Director and Best Film Editing. A recipient of various other industry accolades, two of his films have been selected for preservation in the National Film Registry by the Library of Congress.
+                      birthDate:
+                        type: integer
+                        example: YYYY-MM-DD
+                  imagePath:
+                    type: string
+                    example: https://xl.movieposterdb.com/22_11/1991/301928/xl_the-terminator-movie-poster_c32bbde4.jpg
+                  fetured:
+                    type: boolean
+                    example: true
+        '500':
+          description: Internal Server Error
+  /movies/genres/{genreName}:
+    get:
+      tags:
+        - Movies
+      summary: Get a specific movie genre by movie genre name
+      description: GET request to get a specific movie genre by genre name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: genreName
+          in: path
+          description: The genre name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  genreName:
+                    type: string
+                    example: Sci-Fi
+                  description:
+                    type: string
+                    example: Science fiction (sometimes shortened to sf or sci-fi) is a genre of speculative fiction, which typically deals with imaginative and futuristic concepts such as advanced science and technology, space exploration, time travel, parallel universes, and extraterrestrial life.
+        '500':
+          description: Internal Server Error
+  /movies/directors/{directorName}:
+    get:
+      tags:
+        - Movies
+      summary: Get a specific director by director name
+      description: Get a specific director by director name. This can only be done by a logged in user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: directorName
+          in: path
+          description: The director name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful fetch of resource
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  directorName:
+                    type: string
+                    example: James Cameron
+                  bio:
+                    type: string
+                    example: James Francis Cameron is a Canadian filmmaker. A major figure in the post-New Hollywood era, he is considered one of the industry's most innovative filmmakers, regularly pushing the boundaries of cinematic capability with his use of novel technologies. He first gained recognition for writing and directing The Terminator (1984) and found further success with Aliens (1986), The Abyss (1989), Terminator 2, Judgment Day (1991), and the action comedy True Lies (1994). He wrote and directed Titanic (1997), Avatar (2009) and its sequels, with Titanic earning him Academy Awards for Best Picture, Best Director and Best Film Editing. A recipient of various other industry accolades, two of his films have been selected for preservation in the National Film Registry by the Library of Congress.
+                  birthDate:
+                    type: integer
+                    example: YYYY-MM-DD
+        '500':
+          description: Internal Server Error

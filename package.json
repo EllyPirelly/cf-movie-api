@@ -4,7 +4,7 @@
   "description": "RESTful API for movie lovers that want to be able to access information about different movies",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,7 +30,9 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "uuid": "^9.0.0"
+    "swagger-ui-express": "^4.6.2",
+    "uuid": "^9.0.0",
+    "yaml": "^2.2.1"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
