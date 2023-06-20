@@ -72,19 +72,33 @@ mongoose.set('strictQuery', false);
 //   useUnifiedTopology: true
 // });
 
-// GENERAL
-
+/**
+* GENERAL
+* endpoint '/'
+* @returns an HTML page containing one sentence
+*/
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to the MoviePool API!');
 });
 
+/**
+* GENERAL
+* endpoint '/documentation'
+* @returns an HTML page containing one sentence
+*/
 app.get('/documentation', (req, res) => {
   res.status(200).send('API Documentation found.');
 });
 
-// CREATE
-
-// post / add user
+/**
+* CREATE: posts / adds user
+* endpoint '/users'
+* @param {string} userName
+* @param {string} email
+* @param {string} password
+* @param {number} birthDate
+* @returns an object holding user data
+*/
 app.post('/users',
   [
     check('userName')
@@ -141,7 +155,13 @@ app.post('/users',
     });
   });
 
-// post / add movie via movieid to user's favorites list
+/**
+* CREATE: post / add a favorite movie to user's favorite movies by movieid
+* endpoint '/users/{userName}/movies/{movieid}'
+* @param {string} userName
+* @param {string} movieid
+* @returns an object holding user's favorite movies including newly added movie(s)
+*/
 app.post('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
@@ -160,9 +180,11 @@ app.post('/users/:userName/movies/:movieid',
     });
   });
 
-// READ
-
-// get all users
+/**
+* READ: get all users
+* endpoint '/users'
+* @returns an object holding all users data
+*/
 app.get('/users',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find().then((users) => {
@@ -173,7 +195,11 @@ app.get('/users',
     });
   });
 
-// get all movies
+/**
+* READ: get all movies
+* endpoint '/movies'
+* @returns an object holding all movies data
+*/
 app.get('/movies',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find().then((movies) => {
@@ -185,7 +211,12 @@ app.get('/movies',
   }
 );
 
-// get a specific user by userName
+/**
+* READ: get a specific user by userName
+* endpoint '/users/{userName}'
+* @param {string} userName
+* @returns an object holding data of a specific user
+*/
 app.get('/users/:userName',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({
@@ -198,7 +229,12 @@ app.get('/users/:userName',
     });
   });
 
-// get a specific movie by title
+/**
+* READ: get a specific movie by title
+* endpoint '/movies/{title}'
+* @param {string} title
+* @returns an object holding data of a specific movie
+*/
 app.get('/movies/:title',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({
@@ -211,7 +247,12 @@ app.get('/movies/:title',
     });
   });
 
-// get a specific movie genre by genreName
+/**
+* READ: get a specific movie genre by genreName
+* endpoint '/movies/genres/{genreName}'
+* @param {string} genreName
+* @returns an object holding data of a specific movie genre
+*/
 app.get('/movies/genres/:genreName',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({
@@ -224,7 +265,12 @@ app.get('/movies/genres/:genreName',
     });
   });
 
-// get a specific director by directorName
+/**
+* READ: get a specific director by directorName
+* endpoint '/movies/directors/{directorName}'
+* @param {string} directorName
+* @returns an object holding data of a specific director
+*/
 app.get('/movies/directors/:directorName',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({
@@ -237,9 +283,14 @@ app.get('/movies/directors/:directorName',
     });
   });
 
-// UPDATE
-
-// update user by userName
+/**
+* PUT: edit / update user by useName
+* endpoint '/users/{userName}'
+* @param {string} userName
+* @param {string} password
+* @param {string} email
+* @returns an object holding updated data of a specific user
+*/
 app.put('/users/:userName',
   [
     check('userName')
@@ -289,9 +340,12 @@ app.put('/users/:userName',
     });
   });
 
-// DELETE
-
-// delete user by userName
+/**
+* DELETE: delete a user by userName
+* endpoint '/users/{userName}'
+* @param {string} userName
+* @returns a message and redirects to welcome page
+*/
 app.delete('/users/:userName',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndRemove({
@@ -308,7 +362,13 @@ app.delete('/users/:userName',
     });
   });
 
-// delete movie via movieid off of user's favorites list
+/**
+* DELETE: delete a favorite movie off of user's favorite movies by movieis
+* endpoint '/users/{userName}/movies/{movieid}'
+* @param {string} userName
+* @param {string} movieid
+* @returns an object holding data of user's favorite movies
+*/
 app.delete('/users/:userName/movies/:movieid',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(

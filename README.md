@@ -31,6 +31,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
   - must contain two collections: `users` `movies` with various documents
   - must be build using MongoDB (MongoDB Community Server, Mongo Shell, MongoDB Database Tools) with "code first" approach: first design endpoints, then design database
   - must be hostet on [MongoDB Atlas](https://www.mongodb.com/atlas/database)
+  - must use [JSDoc](https://jsdoc.app/) for technical documentation
 
 ### Feature requirements / Accessible information, defining the endpoints
 `users`
@@ -144,7 +145,7 @@ This RESTful API has been built split into several tasks for Achievement 2 and 3
 ## Heads-up: JSDoc set-up (note to myself)
 - as `jsdoc` is installed locally via `npm install --save-dev jsdoc` to trigger build, run
 ```
-./node_modules/.bin/jsdoc yourJavaScriptFile.js
+./node_modules/.bin/jsdoc index.js
 ```
 - ONLY WORKS IN FEATURE BRANCH!
 - (if installed globally, you could run `jsdoc yourJavaScriptFile.js`)
